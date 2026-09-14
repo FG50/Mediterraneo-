@@ -126,6 +126,7 @@ nav.jump a:hover{color:var(--ink);border-bottom-color:var(--brand)}
 .field input::-webkit-calendar-picker-indicator{filter:grayscale(1);opacity:.5;cursor:pointer}
 .stay-note{display:flex;align-items:center;gap:8px;padding-left:20px;font-size:14px;color:var(--ink-2)}
 .stay-note b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+.stay-note .ask{color:var(--ink-3)}
 
 /* ---------- hero ---------- */
 .hero-band{background:linear-gradient(180deg,var(--cream) 0%,var(--ground) 100%)}
@@ -584,7 +585,12 @@ const PLACES = [
       and the section shows as sold out. `photos`: put the file's
       URL in `src`; an empty src shows a labelled placeholder.
    ============================================================ */
-const AVAILABILITY_CHECKED = "12 September 2026";
+/* `free` e' l'ultima cosa che sappiamo dal registro, ed e' usata solo per
+   chiudere una camera davvero esaurita. Il numero di letti liberi NON si
+   scrive accanto alle date scelte dall'ospite: si riferirebbe al giorno in
+   cui l'abbiamo letto, non alle sue notti, e a chi legge sembrerebbe una
+   risposta alla sua domanda. Qui si prenota chiedendo: la conferma arriva
+   con la risposta, e quella e' vera per qualunque data. */
 
 const ROOMS = [
   { id:"mixed", name:"Mixed Dormitory", codes:"Beds G1–G8", unit:"bed", beds:8, free:8, price:70000,
@@ -901,6 +907,7 @@ function refresh() {
   elNote.innerHTML = nt
     ? `<b>${nt}</b> night${nt > 1 ? "s" : ""} · ${pretty(elIn.value)} → ${pretty(elOut.value)} · <b>${g}</b> guest${g > 1 ? "s" : ""}`
     : "Pick a check-out date after your check-in.";
+  if (nt) elNote.innerHTML += ' · <span class="ask">we reply with the room, usually the same day</span>';
 
   ROOMS.forEach(r => {
     const tot = document.querySelector(`[data-total="${r.id}"]`);
@@ -912,9 +919,13 @@ function refresh() {
         r.unit === "bed" && per > 1 ? ` · ${per} beds` : ""} · ${nt} night${nt > 1 ? "s" : ""}`;
     } else { tot.textContent = ""; }
 
-    if (r.free === 0) { txt.textContent = "Sold out"; btn.disabled = true; btn.textContent = "Sold out"; }
-    else if (r.unit === "bed") { txt.textContent = `${r.free} of ${r.beds} beds free`; btn.disabled = false; btn.textContent = "Book"; }
-    else { txt.textContent = "Available"; btn.disabled = false; btn.textContent = "Book"; }
+    if (r.free === 0) {
+      txt.textContent = "Closed for now";
+      btn.disabled = true; btn.textContent = "Closed";
+    } else {
+      txt.textContent = "We confirm your dates when we answer";
+      btn.disabled = false; btn.textContent = "Book";
+    }
   });
 }
 [elIn, elOut, elGuests].forEach(el => el.addEventListener("change", () => {
@@ -1160,7 +1171,7 @@ const wmo = c => WMO[c] ?? "";
   if (!CONTACT.whatsapp && !CONTACT.email) manca.push("i contatti (<code>CONTACT</code>)");
   if (ROOMS.some(r => r.photos.some(f => !f.src))) manca.push("le foto delle camere");
 
-  const testa = `Availability last checked ${AVAILABILITY_CHECKED}. `;
+  const testa = "";
   if (!manca.length) {
     document.getElementById("setupNote").innerHTML =
       testa + "Booking requests go straight into our register.";
