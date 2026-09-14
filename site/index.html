@@ -1,0 +1,1156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Six rooms in the middle of Asunción, from an eight-bed dorm to a double with its own bathroom. Book straight with us — no booking site in between.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23E2495F'/%3E%3Cg fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 21v-6a2 2 0 0 1 2-2h9a4 4 0 0 1 4 4v4'/%3E%3Cpath d='M7 24v-3M25 24v-3M7 17h18'/%3E%3Ccircle cx='11' cy='10' r='1.8'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="canonical" href="https://fg50.github.io/Mediterraneo-/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Mediterraneo Youth Hostel · Asunción">
+<meta property="og:description" content="Six rooms in the middle of Asunción, from an eight-bed dorm to a double with its own bathroom. Book straight with us — no booking site in between.">
+<meta property="og:url" content="https://fg50.github.io/Mediterraneo-/">
+<meta property="og:locale" content="en">
+<title>Mediterraneo Youth Hostel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+
+<style>
+/* ==========================================================
+   One light world, on purpose — the page looks the same
+   whatever the phone's theme is set to.
+   ========================================================== */
+:root{
+  --ground:#FFFFFF;
+  --cream:#FDF9F4;
+  --surface:#FFFFFF;
+  --surface-2:#F8F5F1;
+  --ink:#26221F;
+  --ink-2:#71695F;
+  --ink-3:#A69D93;
+  --line:#EDE8E1;
+  --line-strong:#DCD5CB;
+  --brand:#E2495F;
+  --brand-deep:#C2374C;
+  --brand-soft:#FDEFF0;
+  --on-brand:#FFFFFF;
+  --ok:#1A7A57;
+  --ok-soft:#E6F4EE;
+  --warn:#9A5A18;
+  --warn-soft:#FBF0E2;
+  --sky:#EAF2F6;
+  --map-bg:#F6F2EC;
+  --map-ring:#E2DACE;
+  --shadow-s:0 1px 2px rgba(38,34,31,.05), 0 4px 12px -8px rgba(38,34,31,.18);
+  --shadow-m:0 2px 5px rgba(38,34,31,.06), 0 14px 30px -14px rgba(38,34,31,.22);
+  --shadow-l:0 4px 10px rgba(38,34,31,.07), 0 26px 50px -20px rgba(38,34,31,.28);
+  --r-lg:18px;
+  --r-md:14px;
+  --r-sm:10px;
+  --maxw:1120px;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--ground);color:var(--ink);
+  font-family:"Figtree","Helvetica Neue",Arial,sans-serif;
+  font-size:16.5px;line-height:1.6;-webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{
+  font-family:"Plus Jakarta Sans","Figtree",Arial,sans-serif;
+  font-weight:800;margin:0;text-wrap:balance;line-height:1.14;letter-spacing:-.02em;
+}
+p{margin:0}
+a{color:inherit}
+button,input,select,textarea{font:inherit;color:inherit}
+img{max-width:100%;display:block}
+:focus-visible{outline:2.5px solid var(--brand);outline-offset:2px;border-radius:6px}
+.wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:20px}
+
+/* ---------- header ---------- */
+header.top{
+  position:sticky;top:0;z-index:40;background:rgba(255,255,255,.92);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line);
+}
+.top-in{display:flex;align-items:center;gap:18px;min-height:64px;flex-wrap:wrap;padding-block:9px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;margin-right:auto}
+.brand .mark{
+  width:30px;height:30px;border-radius:10px;background:var(--brand);color:#fff;
+  display:grid;place-items:center;flex:none;box-shadow:var(--shadow-s);
+}
+.brand b{font-family:"Plus Jakarta Sans",Arial,sans-serif;font-weight:800;font-size:21px;letter-spacing:-.03em}
+.brand span{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);font-weight:700}
+nav.jump{display:flex;gap:18px;flex-wrap:wrap}
+nav.jump a{
+  text-decoration:none;font-size:14px;font-weight:600;color:var(--ink-2);
+  padding:5px 0;border-bottom:2px solid transparent;
+  white-space:nowrap;flex:none;
+}
+nav.jump a:hover{color:var(--ink);border-bottom-color:var(--brand)}
+
+/* ---------- weather ---------- */
+.wx{background:var(--sky);border-bottom:1px solid var(--line)}
+.wx-in{display:flex;align-items:center;gap:26px;flex-wrap:wrap;padding-block:14px}
+.wx-now{display:flex;align-items:center;gap:14px}
+.wx-temp{font-family:"Plus Jakarta Sans",Arial,sans-serif;font-weight:800;font-size:33px;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.03em}
+.wx-meta{display:flex;flex-direction:column;gap:1px}
+.wx-place{font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+.wx-phrase{font-size:15px;font-weight:700}
+.wx-detail{font-size:13.5px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.wx-days{display:flex;gap:10px;flex-wrap:wrap;margin-left:auto}
+.wx-day{
+  display:flex;flex-direction:column;gap:1px;min-width:86px;
+  background:rgba(255,255,255,.72);border-radius:var(--r-sm);padding:7px 11px;
+}
+.wx-day .d{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.wx-day .t{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+.wx-day .t i{font-style:normal;font-weight:500;color:var(--ink-3)}
+.wx-day .p{font-size:12px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:15ch}
+.wx-src{font-size:11px;color:var(--ink-3);width:100%}
+
+/* ---------- search ---------- */
+.searchbar{position:sticky;top:64px;z-index:30;background:var(--ground);border-bottom:1px solid var(--line)}
+.search-in{display:flex;align-items:center;flex-wrap:wrap;padding-block:14px}
+.search-fields{
+  display:flex;flex-wrap:wrap;gap:1px;background:var(--line);
+  border:1px solid var(--line);border-radius:99px;overflow:hidden;box-shadow:var(--shadow-m);
+}
+.field{background:var(--surface);padding:9px 22px;min-width:136px;display:flex;flex-direction:column;gap:1px}
+.field label{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+.field input,.field select{border:0;background:transparent;padding:0;font-size:15px;font-weight:600;width:100%;font-variant-numeric:tabular-nums}
+.field input::-webkit-calendar-picker-indicator{filter:grayscale(1);opacity:.5;cursor:pointer}
+.stay-note{display:flex;align-items:center;gap:8px;padding-left:20px;font-size:14px;color:var(--ink-2)}
+.stay-note b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+
+/* ---------- hero ---------- */
+.hero-band{background:linear-gradient(180deg,var(--cream) 0%,var(--ground) 100%)}
+.hero{padding-block:52px 40px}
+.hero h1{font-size:clamp(38px,6vw,60px);max-width:14ch}
+.hero .lede{margin-top:18px;max-width:54ch;font-size:18px;color:var(--ink-2)}
+.hero .place{margin-top:22px;display:flex;flex-wrap:wrap;gap:8px 24px;font-size:14.5px;color:var(--ink-2)}
+.hero .place b{color:var(--ink);font-weight:700}
+.house{margin-top:28px;display:flex;flex-wrap:wrap;gap:8px;padding:0}
+.house li{
+  list-style:none;font-size:13px;font-weight:600;color:var(--ink-2);
+  background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:6px 14px;
+  box-shadow:var(--shadow-s);
+}
+.direct{
+  margin-top:28px;background:var(--brand-soft);border-radius:var(--r-md);
+  padding:18px 22px;max-width:66ch;display:flex;gap:14px;align-items:flex-start;
+}
+.direct svg{flex:none;color:var(--brand);margin-top:2px}
+.direct p{font-size:15px}
+.direct strong{font-weight:700}
+
+/* ---------- neighbourhood ---------- */
+.hood{padding-block:20px 52px;scroll-margin-top:154px}
+.hood-head{margin-bottom:20px;max-width:60ch}
+.hood-head h2{font-size:clamp(26px,3.2vw,34px)}
+.hood-head p{font-size:14.5px;color:var(--ink-2);margin-top:8px}
+.hood-grid{display:grid;gap:22px;grid-template-columns:minmax(0,1.2fr) minmax(280px,.95fr);align-items:start}
+@media (max-width:880px){ .hood-grid{grid-template-columns:1fr} }
+.mapbox{
+  position:relative;border:1px solid var(--line);border-radius:var(--r-lg);
+  background:var(--map-bg);overflow:hidden;aspect-ratio:5/4;box-shadow:var(--shadow-s);
+}
+.mapbox > #map{width:100%;height:100%}
+.mapbox .leaflet-container{
+  font:inherit;background:var(--map-bg);
+}
+.mapbox .leaflet-control-attribution{
+  font-size:10px;background:rgba(255,255,255,.86);color:var(--ink-3);
+}
+.mapbox .leaflet-control-attribution a{color:var(--ink-2)}
+.mapbox .leaflet-bar a{
+  color:var(--ink);border-bottom-color:var(--line);
+}
+.mapbox .leaflet-bar a:hover{background:var(--surface-2)}
+/* un pin: goccia col simbolo dentro, come sulla mappa disegnata a mano */
+.pin{display:block}
+.pin svg{display:block;overflow:visible}
+.pin.on{filter:drop-shadow(0 0 0 rgba(0,0,0,0)) drop-shadow(0 3px 7px rgba(226,73,95,.55))}
+.leaflet-popup-content{margin:11px 14px;font-size:13.5px;line-height:1.5}
+.leaflet-popup-content b{display:block;font-size:15px;margin-bottom:2px}
+.leaflet-popup-content a{color:var(--brand-deep);font-weight:700}
+/* quando Leaflet non arriva, il riquadro dice cosa fare invece di restare vuoto */
+.map-off{
+  height:100%;display:flex;flex-direction:column;justify-content:center;gap:9px;
+  padding:26px;text-align:center;font-size:14px;color:var(--ink-2);
+}
+.map-off b{color:var(--ink)}
+.map-off a{color:var(--brand-deep);font-weight:700}
+.map-legend{
+  position:absolute;left:14px;top:14px;z-index:900;display:flex;gap:14px;align-items:center;
+  background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:99px;
+  padding:6px 13px;font-size:11.5px;color:var(--ink-2);font-weight:700;box-shadow:var(--shadow-s);
+}
+.map-legend .k{display:inline-flex;align-items:center;gap:6px}
+.poi-list{display:flex;flex-direction:column;gap:4px}
+.poi{
+  display:grid;grid-template-columns:auto 1fr auto;gap:2px 14px;align-items:baseline;
+  padding:13px 14px;border-radius:var(--r-md);border:1px solid transparent;
+  background:none;text-align:left;cursor:pointer;width:100%;transition:background .15s,border-color .15s;
+}
+.poi:hover,.poi.on{background:var(--surface-2);border-color:var(--line)}
+.poi:not([data-i]){cursor:default}
+.poi .ico{
+  grid-row:1/5;align-self:center;width:38px;height:38px;border-radius:12px;
+  background:var(--brand);color:#fff;display:grid;place-items:center;flex:none;
+  box-shadow:var(--shadow-s);
+}
+.poi .kind{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--brand)}
+.poi .dist{grid-column:3;grid-row:1;font-size:13.5px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.poi .nm{grid-column:2;font-size:15.5px;font-weight:700;line-height:1.3}
+.poi .walk{grid-column:3;grid-row:2;font-size:12px;color:var(--ink-3);white-space:nowrap;font-variant-numeric:tabular-nums}
+.poi .note{grid-column:2/4;font-size:13.5px;color:var(--ink-2);margin-top:3px}
+.poi .gmap{
+  grid-column:2/4;margin-top:6px;font-size:12.5px;font-weight:700;color:var(--brand-deep);
+  display:inline-flex;align-items:center;gap:5px;text-decoration:none;width:max-content;
+}
+.poi .gmap:hover{text-decoration:underline}
+
+/* ---------- rooms ---------- */
+.rooms{padding-bottom:48px;display:flex;flex-direction:column;gap:60px}
+.room{scroll-margin-top:154px}
+.room-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.room-head h2{font-size:clamp(25px,3.1vw,33px)}
+.beds-code{
+  font-size:11.5px;color:var(--ink-2);font-weight:700;letter-spacing:.08em;
+  background:var(--surface-2);border-radius:99px;padding:5px 12px;font-variant-numeric:tabular-nums;
+}
+.frame{
+  position:relative;border-radius:var(--r-lg);overflow:hidden;
+  background:var(--surface-2);border:1px solid var(--line);aspect-ratio:3/2;max-height:520px;
+  box-shadow:var(--shadow-s);
+}
+@media (min-width:900px){ .frame{aspect-ratio:21/9} }
+.track{display:flex;height:100%;transition:transform .42s cubic-bezier(.22,.61,.36,1)}
+@media (prefers-reduced-motion:reduce){ .track{transition:none} }
+.slide{min-width:100%;height:100%;position:relative}
+.slide img{width:100%;height:100%;object-fit:cover}
+.ph{
+  width:100%;height:100%;display:grid;place-content:center;gap:10px;text-align:center;padding:20px;
+  background:
+    repeating-linear-gradient(45deg,transparent 0 12px,rgba(0,0,0,.026) 12px 13px),
+    linear-gradient(150deg,var(--cream),var(--surface-2));
+}
+.ph .ph-n{
+  width:44px;height:44px;border-radius:14px;background:#fff;box-shadow:var(--shadow-s);
+  display:grid;place-items:center;color:var(--ink-3);margin-inline:auto;
+}
+.ph .ph-t{font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+.nav-btn{
+  position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:99px;
+  border:1px solid var(--line);background:rgba(255,255,255,.94);
+  color:var(--ink);cursor:pointer;display:grid;place-items:center;box-shadow:var(--shadow-m);
+}
+.nav-btn:hover{background:#fff;box-shadow:var(--shadow-l)}
+.nav-btn[disabled]{opacity:.3;cursor:default;box-shadow:none}
+.nav-btn.prev{left:14px}
+.nav-btn.next{right:14px}
+.dots{
+  position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:6px;
+  padding:7px 11px;border-radius:99px;background:rgba(255,255,255,.9);border:1px solid var(--line);
+  box-shadow:var(--shadow-s);
+}
+.dot{width:6px;height:6px;border-radius:99px;border:0;padding:0;background:var(--line-strong);cursor:pointer}
+.dot[aria-current="true"]{background:var(--brand);width:18px}
+.count{
+  position:absolute;right:14px;top:14px;font-size:11.5px;font-weight:700;
+  background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:99px;
+  padding:4px 11px;font-variant-numeric:tabular-nums;color:var(--ink-2);box-shadow:var(--shadow-s);
+}
+.strip{margin-top:16px;display:flex;gap:20px 30px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+.strip-left{flex:1 1 320px;min-width:0;display:flex;flex-direction:column;gap:11px}
+.incl{font-size:15.5px;color:var(--ink-2)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;border-radius:99px;padding:5px 12px;border:1px solid transparent}
+.chip .pip{width:6px;height:6px;border-radius:99px;background:currentColor}
+.chip.free{background:var(--ok-soft);color:var(--ok)}
+.chip.tight{background:var(--warn-soft);color:var(--warn)}
+.chip.out{background:var(--surface-2);color:var(--ink-3)}
+.chip.plain{background:var(--surface);border-color:var(--line);color:var(--ink-2)}
+.strip-right{flex:0 0 auto;display:flex;align-items:flex-end;gap:24px;flex-wrap:wrap}
+.price .amount{font-family:"Plus Jakarta Sans",Arial,sans-serif;font-weight:800;font-size:31px;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1}
+.price .amount .cur{font-size:.64em;font-weight:700;margin-right:.1em;color:var(--ink-2)}
+.price .unit{font-size:13.5px;color:var(--ink-2);margin-top:5px}
+.price .total{font-size:13.5px;color:var(--ink-2);margin-top:2px}
+.price .total b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+.book{
+  border:0;cursor:pointer;border-radius:99px;padding:14px 32px;
+  background:linear-gradient(180deg,var(--brand),var(--brand-deep));
+  color:var(--on-brand);font-weight:700;font-size:16px;box-shadow:var(--shadow-m);white-space:nowrap;
+  transition:transform .12s, box-shadow .15s;
+}
+.book:hover{box-shadow:var(--shadow-l);transform:translateY(-1px)}
+.book:active{transform:translateY(0)}
+.book[disabled]{background:var(--surface-2);color:var(--ink-3);box-shadow:none;cursor:default;transform:none}
+
+/* ---------- dialog ---------- */
+dialog{
+  border:1px solid var(--line);border-radius:var(--r-lg);padding:0;background:var(--surface);
+  color:var(--ink);max-width:520px;width:calc(100% - 32px);box-shadow:var(--shadow-l);
+}
+dialog::backdrop{background:rgba(38,34,31,.45)}
+.d-head{padding:24px 26px 18px;border-bottom:1px solid var(--line)}
+.d-head h3{font-size:24px}
+.d-head p{font-size:14px;color:var(--ink-2);margin-top:6px}
+.d-body{padding:22px 26px;display:flex;flex-direction:column;gap:17px}
+.summary{background:var(--cream);border-radius:var(--r-md);padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+.srow{display:flex;justify-content:space-between;gap:16px;font-size:14.5px}
+.srow span{color:var(--ink-2)}
+.srow b{font-variant-numeric:tabular-nums}
+.srow.tot{border-top:1px solid var(--line-strong);padding-top:9px;font-size:16px}
+.f{display:flex;flex-direction:column;gap:6px}
+.f label{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.f input,.f textarea{border:1px solid var(--line-strong);background:var(--ground);border-radius:var(--r-sm);padding:11px 13px;font-size:15px;width:100%}
+.f input:focus,.f textarea:focus{border-color:var(--brand)}
+.f textarea{resize:vertical;min-height:68px;font-family:inherit}
+.d-foot{padding:18px 26px 24px;display:flex;gap:10px;flex-wrap:wrap;border-top:1px solid var(--line);align-items:center}
+.btn-ghost{background:none;border:1px solid var(--line-strong);border-radius:99px;padding:12px 22px;font-weight:700;font-size:15px;cursor:pointer;color:var(--ink-2)}
+.btn-ghost:hover{border-color:var(--ink-3);color:var(--ink)}
+.sent{font-size:13px;color:var(--ok);font-weight:700;margin-left:auto}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--line);background:var(--cream);margin-top:24px}
+.foot-in{padding-block:46px;display:grid;gap:34px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+footer h3{font-size:18px;margin-bottom:11px}
+footer p, footer li{font-size:14.5px;color:var(--ink-2)}
+footer ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px}
+.setup{margin-top:4px;border-top:1px dashed var(--line-strong);padding-block:20px 36px;font-size:13px;color:var(--ink-3)}
+.setup code{background:var(--surface);border:1px solid var(--line);padding:1px 6px;border-radius:5px;font-size:12.5px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink-2)}
+
+@media (max-width:760px){
+  nav.jump{order:3;width:100%;flex-wrap:nowrap;overflow-x:auto;gap:20px;padding-bottom:3px;scrollbar-width:none}
+  nav.jump::-webkit-scrollbar{display:none}
+  .room,.hood{scroll-margin-top:116px}
+  .wx-days{margin-left:0;width:100%}
+}
+@media (max-width:640px){
+  .searchbar{position:static}
+  .room,.hood{scroll-margin-top:104px}
+  .search-fields{border-radius:var(--r-md);width:100%}
+  .field{flex:1 1 140px}
+  .stay-note{padding-left:0;padding-top:12px}
+  .strip-right{width:100%;justify-content:space-between;align-items:center}
+}
+
+/* Il minimo che l'Artifact ci dava e qui dobbiamo darci da soli. */
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap top-in">
+    <a class="brand" href="#top">
+      <span class="mark" aria-hidden="true">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17v-5a2 2 0 0 1 2-2h11a4 4 0 0 1 4 4v3"/><path d="M3 20v-3M21 20v-3M3 13h18"/><circle cx="7.5" cy="8.5" r="1.8"/></svg>
+      </span>
+      <b>Mediterraneo</b><span>Asunción</span>
+    </a>
+    <nav class="jump" aria-label="Sections">
+      <a href="#hood">Around us</a>
+      <a href="#mixed">Mixed</a>
+      <a href="#female">Female</a>
+      <a href="#male">Male</a>
+      <a href="#triple">Triple</a>
+      <a href="#twin">Twin</a>
+      <a href="#ensuite">Ensuite</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wx">
+  <div class="wrap wx-in">
+    <div class="wx-now">
+      <div class="wx-temp" id="wxTemp">—</div>
+      <div class="wx-meta">
+        <div class="wx-place">Asunción right now</div>
+        <div class="wx-phrase" id="wxPhrase">Loading the forecast…</div>
+        <div class="wx-detail" id="wxDetail"></div>
+      </div>
+    </div>
+    <div class="wx-days" id="wxDays"></div>
+    <div class="wx-src" id="wxSrc"></div>
+  </div>
+</div>
+
+<div class="searchbar">
+  <div class="wrap search-in">
+    <div class="search-fields">
+      <div class="field"><label for="checkin">Check-in</label><input type="date" id="checkin"></div>
+      <div class="field"><label for="checkout">Check-out</label><input type="date" id="checkout"></div>
+      <div class="field"><label for="guests">Guests</label>
+        <select id="guests"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select>
+      </div>
+    </div>
+    <p class="stay-note" id="stayNote"></p>
+  </div>
+</div>
+
+<main id="top">
+  <div class="hero-band">
+    <section class="wrap hero">
+      <h1>A quiet house in the middle of Asunción.</h1>
+      <p class="lede">Six rooms, from an eight-bed dorm to a double with its own bathroom. Shared kitchen,
+        garden and terrace, and someone at reception all night. Book straight with us — no booking site in between.</p>
+      <p class="place">
+        <span><b>Nuestra Señora de la Asunción 865</b> · Asunción, Paraguay</span>
+        <span>Check-in from 13:00 · check-out 11:00 · reception 24 h</span>
+      </p>
+      <ul class="house">
+        <li>Free WiFi throughout</li><li>Shared kitchen</li><li>Garden &amp; roof terrace</li>
+        <li>24-hour reception</li><li>24-hour security</li><li>Air conditioning</li><li>Lockers</li>
+        <li>Luggage storage</li><li>Laundry &amp; ironing</li><li>Daily cleaning</li>
+        <li>Card payment · invoice on request</li>
+      </ul>
+      <div class="direct">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-4.6-7-10a7 7 0 0 1 14 0c0 5.4-7 10-7 10z"/><path d="M9.5 12.2l1.8 1.8 3.4-3.6"/></svg>
+        <p><strong>Booking here costs you less.</strong> Prices on this page are the whole price of the room —
+          taxes in, nothing added at the desk. Booking sites charge us a commission on every reservation;
+          when you write to us directly, that money stays out of the price.</p>
+      </div>
+    </section>
+  </div>
+
+  <section class="wrap hood" id="hood">
+    <div class="hood-head">
+      <h2>What is around the door</h2>
+      <p>Drag the map, zoom in, or tap a place in the list to find it. Distances are straight-line from the front door where we have measured the spot; the rest carry their street corner, which is what you need on foot anyway. Walking time counts 80 metres a minute — the centre of Asunción is flat.</p>
+    </div>
+    <div class="hood-grid">
+      <div class="mapbox">
+        <div id="map" role="application" aria-label="Street map of the neighbourhood, with the hostel and the places listed beside it"></div>
+        <div class="map-legend">
+          <span class="k"><svg width="11" height="14" viewBox="0 0 10 13" aria-hidden="true"><path d="M5 0C2.2 0 0 2.2 0 5c0 3.6 5 8 5 8s5-4.4 5-8c0-2.8-2.2-5-5-5z" fill="#26221F"/></svg> The hostel</span>
+          <span class="k"><svg width="11" height="14" viewBox="0 0 10 13" aria-hidden="true"><path d="M5 0C2.2 0 0 2.2 0 5c0 3.6 5 8 5 8s5-4.4 5-8c0-2.8-2.2-5-5-5z" fill="#E2495F"/></svg> Places nearby</span>
+        </div>
+      </div>
+      <div class="poi-list" id="poiList"></div>
+    </div>
+  </section>
+
+  <section class="wrap rooms" id="roomList"></section>
+</main>
+
+<footer>
+  <div class="wrap foot-in">
+    <div>
+      <h3>Finding us</h3>
+      <p>Nuestra Señora de la Asunción 865, Asunción 1101, Paraguay.<br>
+        Ten minutes on foot from Plaza Uruguaya and the old railway station,
+        seven from the Panteón Nacional.</p>
+    </div>
+    <div>
+      <h3>House rules</h3>
+      <ul>
+        <li>Check-in from 13:00, check-out by 11:00 — reception is staffed around the clock, so late arrivals are fine.</li>
+        <li>Dorms are single-sex or mixed; you choose which when you book.</li>
+        <li>The whole house is non-smoking. There is a smoking area in the garden.</li>
+        <li>Kitchen open to everyone; label what you leave in the fridge.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Payment</h3>
+      <p>Guaraníes in cash, or card at the desk. Nothing is charged when you send a request —
+        we confirm the room first, and you pay on arrival.</p>
+    </div>
+  </div>
+  <div class="wrap setup" id="setupNote"></div>
+</footer>
+
+<dialog id="bookDlg">
+  <form method="dialog" id="bookForm">
+    <div class="d-head">
+      <h3 id="dlgTitle">Request a bed</h3>
+      <p>We answer by message, usually the same day. Nothing is charged now.</p>
+    </div>
+    <div class="d-body">
+      <div class="summary" id="dlgSummary"></div>
+      <div class="f"><label for="gName">Your name</label>
+        <input id="gName" name="gName" type="text" autocomplete="name" required placeholder="First and last name"></div>
+      <div class="f"><label for="gEmail">Email</label>
+        <input id="gEmail" name="gEmail" type="email" autocomplete="email" required placeholder="you@example.com"></div>
+      <div class="f"><label for="gNote">Anything we should know</label>
+        <textarea id="gNote" name="gNote" placeholder="Arrival time, bottom bunk, travelling with a friend…"></textarea></div>
+    </div>
+    <div class="d-foot">
+      <button class="book" type="button" id="sendReq">Send request</button>
+      <button class="btn-ghost" type="button" id="copyReq">Copy request</button>
+      <button class="btn-ghost" type="button" id="closeDlg">Cancel</button>
+      <span class="sent" id="sentMsg" hidden></span>
+    </div>
+  </form>
+</dialog>
+
+<script>
+/* ============================================================
+   1. I DUE VALORI DA RIEMPIRE
+
+   CONTACT — il numero WhatsApp col prefisso internazionale, senza
+   spazi ne' "+", e l'email. Servono anche come rete di sicurezza: se
+   il registro non risponde, la richiesta parte di la'.
+
+   BOOKINGS_ENDPOINT — l'indirizzo del foglio Google che raccoglie le
+   prenotazioni. Si ottiene in tre minuti seguendo site/README.md.
+   Finche' e' vuoto il tasto Prenota apre WhatsApp invece di scrivere.
+   ============================================================ */
+const CONTACT = { whatsapp: "", email: "" };
+const BOOKINGS_ENDPOINT = "";
+
+/* ============================================================
+   2. MAP SYMBOLS
+      The `icon` on each place below picks one of these. Drawn on
+      a 24 x 24 grid so they sit the same in the pin and the list.
+   ============================================================ */
+const ICONS = {
+  museum:     "M3 9.5 12 4l9 5.5M4 20h16M6.5 10v9M10.2 10v9M13.8 10v9M17.5 10v9",
+  monument:   "M6 11a6 6 0 0 1 12 0M4 20h16M6.5 11v9M12 11v9M17.5 11v9",
+  government: "M4 20h16M5.5 20V9.5L12 6l6.5 3.5V20M10 20v-5h4v5M12 6V2.5M12 3h4.5l-1.4 1.3L16.5 6H12",
+  park:       "M12 21v-5M12 3l4.5 6.5h-2.6L18 15H6l4.1-5.5H7.5L12 3zM9 21h6",
+  water:      "M3 8.5q3-3 6 0t6 0 6 0M3 13q3-3 6 0t6 0 6 0M3 17.5q3-3 6 0t6 0 6 0",
+  gym:        "M6.5 8v8M17.5 8v8M4 10.5v3M20 10.5v3M6.5 12h11",
+  market:     "M3 4.5h2.2l2.6 10h9.4l2.1-7H7.3M9.8 19.2h.01M16.6 19.2h.01",
+  mall:       "M6 8h12l-1.1 12H7.1L6 8zM9.2 8V6.2a2.8 2.8 0 0 1 5.6 0V8",
+  house:      "M3.5 11.2 12 4l8.5 7.2M6.5 9.5V20h11V9.5M10 20v-5.2h4V20",
+  church:     "M12 2v4M10 4h4M5 20V11l7-4.5 7 4.5v9M4 20h16M10 20v-4.5h4V20",
+  restaurant: "M7 3v8a2.5 2.5 0 0 0 5 0V3M9.5 11v10M17 3c-1.4 1-2 2.6-2 4.5s.6 3 2 3.5v10"
+};
+
+/* ============================================================
+   3. WHERE WE ARE, AND WHAT IS AROUND
+      Each place carries its own coordinates; the page works out
+      the distance itself, so a corrected coordinate corrects the
+      metres with it. `icon` must be one of the names above.
+   ============================================================ */
+const HOSTEL = { lat: -25.286771, lon: -57.637340 };
+
+const PLACES = [
+  /* Con lat/lon: pallino sulla mappa e distanza misurata.
+     Senza: restano in elenco con l'indirizzo, che e' comunque
+     l'informazione che serve a chi cammina. */
+  { name: "Panteón Nacional & Calle Palma", kind: "Historic centre", icon: "monument",
+    where: "Palma y Chile", lat: -25.28230, lon: -57.63511,
+    note: "The domed mausoleum, and the pedestrian stretch of Palma that starts at its door: cafés, money changers, street musicians at the weekend." },
+  { name: "Palacio de los López", kind: "Presidential palace", icon: "government",
+    where: "El Paraguayo Independiente, on the riverfront", lat: -25.27764, lon: -57.63757,
+    note: "The seat of government. Lit up after dark — worth the walk in the evening." },
+  { name: "Casa de la Independencia", kind: "Museum", icon: "museum",
+    where: "14 de Mayo esq. Presidente Franco", lat: -25.28270, lon: -57.63562,
+    note: "The colonial house where independence was declared in 1811. Free to go in." },
+  { name: "Plaza Uruguaya", kind: "Park", icon: "park",
+    where: "By the old railway station", lat: -25.284722, lon: -57.630000,
+    note: "Shaded square with the second-hand book stalls." },
+  { name: "Costanera de Asunción", kind: "Riverfront", icon: "water",
+    where: "Along the Río Paraguay", lat: -25.27600, lon: -57.63600,
+    note: "The promenade by the river. Sunset over the Chaco from here." },
+
+  { name: "Smart Fit", kind: "Gym", icon: "gym",
+    where: "Oliva esq. Nuestra Señora de la Asunción",
+    note: "On our own street, a couple of blocks towards the river. Day passes available." },
+  { name: "Vit 360", kind: "Gym", icon: "gym",
+    where: "Haedo c/ 15 de Agosto",
+    note: "Smaller neighbourhood gym in La Encarnación." },
+  { name: "Biggie Express", kind: "Supermarket", icon: "market",
+    where: "Mcal. Estigarribia, between Independencia Nacional and Yegros",
+    note: "Open 24 hours — the one to know when you arrive late." },
+  { name: "Stock", kind: "Supermarket", icon: "market",
+    where: "Inside Mall Excelsior, Chile y Manduvirá",
+    note: "A full supermarket, for a proper shop rather than a snack." },
+  { name: "Mall Excelsior", kind: "Shopping centre", icon: "mall",
+    where: "Chile y Manduvirá",
+    note: "Paraguay's first shopping centre, and the one inside the old town: shops, food court, cinema." },
+  { name: "Bar La Esquina", kind: "Lunch buffet", icon: "restaurant",
+    where: "14 de Mayo y Gral. Díaz",
+    note: "Self-service buffet from 13:00, two floors. Monday to Friday and Sunday, 08:00–16:00; closed Saturday." },
+  { name: "Iglesia San Francisco de Asís", kind: "Church", icon: "church",
+    where: "Herrera 363, between Caballero and Iturbe",
+    note: "Franciscan church, blessed in 1901." }
+];
+
+/* ============================================================
+   4. ROOMS — prices and beds as they stand in the hostel's own
+      register. `free` is how many beds are still open; set it to 0
+      and the section shows as sold out. `photos`: put the file's
+      URL in `src`; an empty src shows a labelled placeholder.
+   ============================================================ */
+const AVAILABILITY_CHECKED = "12 September 2026";
+
+const ROOMS = [
+  { id:"mixed", name:"Mixed Dormitory", codes:"Beds G1–G8", unit:"bed", beds:8, free:8, price:70000,
+    incl:"Eight bunks, women and men together · air conditioning · a locker for every bed · shared bathroom on the floor · cleaned daily",
+    photos:[{src:"",alt:"Mixed dormitory, bunks along the wall"},{src:"",alt:"Mixed dormitory, lockers"},
+            {src:"",alt:"Mixed dormitory, window side"},{src:"",alt:"Shared bathroom"},{src:"",alt:"Corridor to the dorm"}] },
+  { id:"female", name:"Female Dormitory", codes:"Beds F1–F6", unit:"bed", beds:6, free:6, price:60000,
+    incl:"Six bunks, women only · air conditioning · a locker for every bed · shared bathroom on the floor · cleaned daily",
+    photos:[{src:"",alt:"Female dormitory, bunks"},{src:"",alt:"Female dormitory, lockers"},
+            {src:"",alt:"Female dormitory, window"},{src:"",alt:"Shared bathroom"}] },
+  { id:"male", name:"Male Dormitory", codes:"Beds M1–M8", unit:"bed", beds:8, free:8, price:70000,
+    incl:"Eight bunks, men only · air conditioning · a locker for every bed · shared bathroom on the floor · cleaned daily",
+    photos:[{src:"",alt:"Male dormitory, bunks"},{src:"",alt:"Male dormitory, lockers"},
+            {src:"",alt:"Male dormitory, window"},{src:"",alt:"Shared bathroom"}] },
+  { id:"triple", name:"Triple Room", codes:"Beds P3–P5", unit:"bed", beds:3, free:3, price:70000,
+    incl:"Three single beds in a room of their own · air conditioning · shared bathroom · cleaned daily · take one bed or the whole room",
+    photos:[{src:"",alt:"Triple room, three single beds"},{src:"",alt:"Triple room from the door"},{src:"",alt:"Shared bathroom"}] },
+  { id:"twin", name:"Twin Room, Garden View", codes:"Room P7", unit:"room", beds:2, free:1, price:120000,
+    incl:"Two single beds for two people · window onto the garden · air conditioning · bathroom shared with one other room · cleaned daily",
+    photos:[{src:"",alt:"Twin room, two single beds"},{src:"",alt:"Twin room, garden window"},
+            {src:"",alt:"View over the garden"},{src:"",alt:"Shared bathroom"}] },
+  { id:"ensuite", name:"Double Room, Private Bathroom", codes:"Room P1", unit:"room", beds:2, free:1, price:140000,
+    incl:"One double bed for two people · bathroom inside the room · air conditioning · cleaned daily · the quietest room in the house",
+    photos:[{src:"",alt:"Double room, double bed"},{src:"",alt:"Private bathroom"},
+            {src:"",alt:"Double room from the door"},{src:"",alt:"Window and desk"}] }
+];
+
+/* ============================================================
+   helpers
+   ============================================================ */
+const gs = n => "₲" + n.toLocaleString("en-US");
+const iso = d => d.toISOString().slice(0, 10);
+const pretty = s => { const [y,m,d] = s.split("-").map(Number);
+  return new Date(Date.UTC(y, m-1, d)).toLocaleDateString("en-GB", {day:"numeric", month:"short", timeZone:"UTC"}); };
+
+const M_PER_DEG_LAT = 110574;
+const mPerDegLon = lat => 111320 * Math.cos(lat * Math.PI / 180);
+const offset = p => ({ x: (p.lon - HOSTEL.lon) * mPerDegLon(HOSTEL.lat),
+                       y: -(p.lat - HOSTEL.lat) * M_PER_DEG_LAT });
+const metres = p => { const o = offset(p); return Math.hypot(o.x, o.y); };
+const showDist = m => m < 950 ? `${Math.round(m / 10) * 10} m` : `${(m / 1000).toFixed(1)} km`;
+const showWalk = m => `${Math.max(1, Math.round(m / 80))} min walk`;
+const iconSVG = (name, size, stroke) =>
+  `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="${stroke}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+     <path d="${ICONS[name] || ICONS.monument}"/></svg>`;
+
+/* ============================================================
+   the neighbourhood plan
+   ============================================================ */
+(function drawMap() {
+  const list = document.getElementById("poiList");
+  const box  = document.getElementById("map");
+
+  const pts = PLACES.filter(p => p.lat && p.lon)
+    .map((p, i) => ({ ...p, i, m: metres(p) }));
+  const senzaPunto = PLACES.filter(p => !(p.lat && p.lon));
+  const segni = {};
+
+  /* Il link a Google Maps: sulle coordinate se le abbiamo misurate,
+     altrimenti sul nome e la via — che e' come lo cercherebbe una
+     persona, e funziona anche per i posti senza pallino. */
+  const gmap = p => "https://www.google.com/maps/search/?api=1&query=" +
+    encodeURIComponent(p.lat && p.lon ? `${p.lat},${p.lon}`
+                                      : `${p.name}, ${p.where}, Asunción, Paraguay`);
+
+  /* ---------- l'elenco a fianco: non dipende dalla mappa ---------- */
+  const riga = p => `
+    <div class="poi" ${p.m !== undefined ? `data-i="${p.i}"` : ""}>
+      <span class="ico">${iconSVG(p.icon, 20, 1.9)}</span>
+      <span class="kind">${p.kind}</span>
+      <span class="dist">${p.m !== undefined ? showDist(p.m) : ""}</span>
+      <span class="nm">${p.name}</span>
+      <span class="walk">${p.m !== undefined ? showWalk(p.m) : ""}</span>
+      <span class="note">${p.where ? `<b>${p.where}.</b> ` : ""}${p.note}</span>
+      <a class="gmap" href="${gmap(p)}" target="_blank" rel="noopener">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 21s-7-4.6-7-10a7 7 0 0 1 14 0c0 5.4-7 10-7 10z"/><circle cx="12" cy="11" r="2.4"/>
+        </svg>Open in Google Maps</a>
+    </div>`;
+  list.innerHTML = [...pts].sort((a, c) => a.m - c.m).map(riga).join("")
+                 + senzaPunto.map(riga).join("");
+
+  function focus(i, on) {
+    list.querySelector(`.poi[data-i="${i}"]`)?.classList.toggle("on", on);
+    segni[i]?.getElement()?.querySelector(".pin")?.classList.toggle("on", on);
+  }
+
+  list.querySelectorAll(".poi[data-i]").forEach(b => {
+    const i = b.dataset.i;
+    b.addEventListener("mouseenter", () => focus(i, true));
+    b.addEventListener("mouseleave", () => focus(i, false));
+    /* un clic sulla riga porta la mappa sul posto; il link se ne va per conto suo */
+    b.addEventListener("click", e => {
+      if (e.target.closest("a") || !segni[i]) return;
+      mappa.flyTo(segni[i].getLatLng(), Math.max(mappa.getZoom(), 16), { duration: .6 });
+      segni[i].openPopup();
+    });
+  });
+
+  /* ---------- la mappa vera ----------
+     Se Leaflet non arriva (rete lenta, CDN giu') la pagina non si
+     rompe: il riquadro lo dice, l'elenco resta, i link pure. */
+  let mappa = null;
+  if (!window.L) {
+    box.innerHTML = `<div class="map-off">
+        <p><b>The map is not loading right now.</b></p>
+        <p>The list beside it has every place, with its street corner and
+           a link that opens it in Google Maps.</p>
+        <p><a href="https://www.google.com/maps/search/?api=1&query=${HOSTEL.lat},${HOSTEL.lon}"
+              target="_blank" rel="noopener">Open our street in Google Maps</a></p>
+      </div>`;
+    document.querySelector(".map-legend")?.remove();
+    return;
+  }
+
+  const pinHTML = (colour, icon, scale) => `
+    <svg class="pin" width="${30 * scale}" height="${36 * scale}" viewBox="-13 -38 26 42" aria-hidden="true">
+      <ellipse cx="0" cy="1.5" rx="5" ry="2" fill="#26221F" opacity=".14"/>
+      <path d="M0,0 C-5.6,-8 -10,-11.2 -10,-16.5 A10,10 0 1 1 10,-16.5 C10,-11.2 5.6,-8 0,0 Z"
+            fill="${colour}" stroke="#fff" stroke-width="1.4"/>
+      <g transform="translate(-6.5,-23) scale(0.542)" fill="none" stroke="#fff"
+         stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="${ICONS[icon] || ICONS.monument}"/>
+      </g>
+    </svg>`;
+
+  const icona = (colour, icon, scale) => L.divIcon({
+    html: pinHTML(colour, icon, scale),
+    className: "",
+    iconSize:    [30 * scale, 36 * scale],
+    iconAnchor:  [15 * scale, 36 * scale],
+    popupAnchor: [0, -32 * scale]
+  });
+
+  mappa = L.map(box, { scrollWheelZoom: false, zoomControl: false })
+           .setView([HOSTEL.lat, HOSTEL.lon], 15);
+  L.control.zoom({ position: "topright" }).addTo(mappa);
+  mappa.attributionControl.setPrefix("");
+
+  L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
+    subdomains: "abcd", maxZoom: 20,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+  }).addTo(mappa);
+
+  /* quanto e' lontano, a colpo d'occhio */
+  [500, 1000, 1500].forEach(r => {
+    L.circle([HOSTEL.lat, HOSTEL.lon], {
+      radius: r, fill: false, color: "#C2A88C", weight: 1, dashArray: "3 5", interactive: false
+    }).addTo(mappa);
+  });
+
+  pts.forEach(p => {
+    const mk = L.marker([p.lat, p.lon], { icon: icona("#E2495F", p.icon, 1), riseOnHover: true })
+      .addTo(mappa)
+      .bindPopup(`<b>${p.name}</b>${p.where ? p.where + "<br>" : ""}
+                  ${showDist(p.m)} · ${showWalk(p.m)}<br>
+                  <a href="${gmap(p)}" target="_blank" rel="noopener">Open in Google Maps</a>`);
+    segni[p.i] = mk;
+    mk.on("mouseover", () => focus(p.i, true));
+    mk.on("mouseout",  () => focus(p.i, false));
+  });
+
+  /* l'ostello per ultimo, piu' grande e piu' scuro, cosi' si legge per primo */
+  L.marker([HOSTEL.lat, HOSTEL.lon], {
+    icon: icona("#26221F", "house", 1.35), zIndexOffset: 1000
+  }).addTo(mappa).bindPopup(
+    `<b>Mediterraneo Youth Hostel</b>Nuestra Señora de la Asunción 865<br>
+     <a href="https://www.google.com/maps/search/?api=1&query=${HOSTEL.lat},${HOSTEL.lon}"
+        target="_blank" rel="noopener">Open in Google Maps</a>`);
+
+  /* tutto dentro l'inquadratura, il pallino piu' lontano compreso */
+  mappa.fitBounds(
+    L.latLngBounds([[HOSTEL.lat, HOSTEL.lon], ...pts.map(p => [p.lat, p.lon])]),
+    { padding: [42, 42], maxZoom: 16 }
+  );
+})();
+
+/* ============================================================
+   dates
+   ============================================================ */
+const elIn = document.getElementById("checkin");
+const elOut = document.getElementById("checkout");
+const elGuests = document.getElementById("guests");
+const elNote = document.getElementById("stayNote");
+
+(function seedDates() {
+  const t = new Date();
+  const a = new Date(Date.UTC(t.getFullYear(), t.getMonth(), t.getDate() + 1));
+  const b = new Date(Date.UTC(t.getFullYear(), t.getMonth(), t.getDate() + 3));
+  elIn.value = iso(a); elOut.value = iso(b);
+  elIn.min = iso(new Date(Date.UTC(t.getFullYear(), t.getMonth(), t.getDate())));
+})();
+
+function nights() {
+  const a = Date.parse(elIn.value), b = Date.parse(elOut.value);
+  if (!a || !b || b <= a) return 0;
+  return Math.round((b - a) / 86400000);
+}
+
+/* ============================================================
+   room sections
+   ============================================================ */
+const list = document.getElementById("roomList");
+const camera = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+  stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  <path d="M3 8.5h3.2l1.4-2h8.8l1.4 2H21v10H3z"/><circle cx="12" cy="13" r="3.3"/></svg>`;
+
+function slideHTML(p, i, room) {
+  if (p.src) return `<div class="slide"><img src="${p.src}" alt="${p.alt}" loading="lazy"></div>`;
+  return `<div class="slide"><div class="ph">
+      <div class="ph-n">${camera}</div>
+      <div class="ph-t">${room.name} · photo ${i + 1} of ${room.photos.length}</div>
+    </div></div>`;
+}
+
+list.innerHTML = ROOMS.map(r => `
+  <article class="room" id="${r.id}">
+    <div class="room-head">
+      <h2>${r.name}</h2>
+      <span class="beds-code">${r.codes}</span>
+    </div>
+    <div class="frame" data-carousel="${r.id}" tabindex="0" role="group"
+         aria-roledescription="carousel" aria-label="${r.name} photos">
+      <div class="track">${r.photos.map((p, i) => slideHTML(p, i, r)).join("")}</div>
+      <span class="count"><span data-cur>1</span> / ${r.photos.length}</span>
+      <button class="nav-btn prev" type="button" aria-label="Previous photo">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+      </button>
+      <button class="nav-btn next" type="button" aria-label="Next photo">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+      </button>
+      <div class="dots">${r.photos.map((_, i) =>
+        `<button class="dot" type="button" data-go="${i}" aria-current="${i === 0}" aria-label="Photo ${i + 1}"></button>`).join("")}</div>
+    </div>
+    <div class="strip">
+      <div class="strip-left">
+        <p class="incl">${r.incl}</p>
+        <div class="chips">
+          <span class="chip ${r.free === 0 ? "out" : r.free <= 2 ? "tight" : "free"}" data-avail="${r.id}">
+            <span class="pip"></span><span data-avail-text></span>
+          </span>
+          <span class="chip plain">Sleeps ${r.beds}</span>
+          <span class="chip plain">Taxes included</span>
+        </div>
+      </div>
+      <div class="strip-right">
+        <div class="price">
+          <div class="amount"><span class="cur">₲</span>${r.price.toLocaleString("en-US")}</div>
+          <div class="unit">per ${r.unit} · per night</div>
+          <div class="total" data-total="${r.id}"></div>
+        </div>
+        <button class="book" type="button" data-book="${r.id}">Book</button>
+      </div>
+    </div>
+  </article>`).join("");
+
+document.querySelectorAll("[data-carousel]").forEach(frame => {
+  const track = frame.querySelector(".track");
+  const dots = [...frame.querySelectorAll(".dot")];
+  const cur = frame.querySelector("[data-cur]");
+  const prev = frame.querySelector(".prev");
+  const next = frame.querySelector(".next");
+  const n = dots.length;
+  let i = 0;
+  function go(to) {
+    i = Math.max(0, Math.min(n - 1, to));
+    track.style.transform = `translateX(${-i * 100}%)`;
+    dots.forEach((d, k) => d.setAttribute("aria-current", String(k === i)));
+    cur.textContent = String(i + 1);
+    prev.disabled = i === 0;
+    next.disabled = i === n - 1;
+  }
+  prev.addEventListener("click", () => go(i - 1));
+  next.addEventListener("click", () => go(i + 1));
+  dots.forEach(d => d.addEventListener("click", () => go(Number(d.dataset.go))));
+  frame.addEventListener("keydown", e => {
+    if (e.key === "ArrowLeft") { e.preventDefault(); go(i - 1); }
+    if (e.key === "ArrowRight") { e.preventDefault(); go(i + 1); }
+  });
+  let x0 = null;
+  frame.addEventListener("touchstart", e => { x0 = e.touches[0].clientX; }, { passive: true });
+  frame.addEventListener("touchend", e => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 45) go(i + (dx < 0 ? 1 : -1));
+    x0 = null;
+  }, { passive: true });
+  go(0);
+});
+
+function refresh() {
+  const nt = nights();
+  const g = Number(elGuests.value);
+  elNote.innerHTML = nt
+    ? `<b>${nt}</b> night${nt > 1 ? "s" : ""} · ${pretty(elIn.value)} → ${pretty(elOut.value)} · <b>${g}</b> guest${g > 1 ? "s" : ""}`
+    : "Pick a check-out date after your check-in.";
+
+  ROOMS.forEach(r => {
+    const tot = document.querySelector(`[data-total="${r.id}"]`);
+    const txt = document.querySelector(`[data-avail="${r.id}"] [data-avail-text]`);
+    const btn = document.querySelector(`[data-book="${r.id}"]`);
+    if (nt) {
+      const per = r.unit === "bed" ? Math.min(g, r.beds) : 1;
+      tot.innerHTML = `<b>${gs(r.price * nt * per)}</b> total${
+        r.unit === "bed" && per > 1 ? ` · ${per} beds` : ""} · ${nt} night${nt > 1 ? "s" : ""}`;
+    } else { tot.textContent = ""; }
+
+    if (r.free === 0) { txt.textContent = "Sold out"; btn.disabled = true; btn.textContent = "Sold out"; }
+    else if (r.unit === "bed") { txt.textContent = `${r.free} of ${r.beds} beds free`; btn.disabled = false; btn.textContent = "Book"; }
+    else { txt.textContent = "Available"; btn.disabled = false; btn.textContent = "Book"; }
+  });
+}
+[elIn, elOut, elGuests].forEach(el => el.addEventListener("change", () => {
+  if (Date.parse(elOut.value) <= Date.parse(elIn.value)) {
+    const a = new Date(elIn.value + "T00:00:00Z");
+    a.setUTCDate(a.getUTCDate() + 1);
+    elOut.value = iso(a);
+  }
+  refresh();
+}));
+refresh();
+
+/* ============================================================
+   booking dialog
+   ============================================================ */
+const dlg = document.getElementById("bookDlg");
+const dlgTitle = document.getElementById("dlgTitle");
+const dlgSummary = document.getElementById("dlgSummary");
+const sentMsg = document.getElementById("sentMsg");
+let current = null;
+
+function openBooking(room) {
+  current = room;
+  const nt = nights();
+  const g = Number(elGuests.value);
+  const per = room.unit === "bed" ? Math.min(g, room.beds) : 1;
+  dlgTitle.textContent = room.unit === "bed" ? "Request a bed" : "Request this room";
+  dlgSummary.innerHTML = `
+    <div class="srow"><span>Room</span><b>${room.name}</b></div>
+    <div class="srow"><span>Dates</span><b>${pretty(elIn.value)} → ${pretty(elOut.value)}</b></div>
+    <div class="srow"><span>Nights</span><b>${nt}</b></div>
+    <div class="srow"><span>Guests</span><b>${g}</b></div>
+    <div class="srow tot"><span>${gs(room.price)} × ${nt} night${nt > 1 ? "s" : ""}${
+      per > 1 ? ` × ${per} beds` : ""} · taxes in</span><b>${gs(room.price * nt * per)}</b></div>`;
+  sentMsg.hidden = true;
+  dlg.showModal();
+}
+
+function requestText() {
+  const nt = nights();
+  const g = Number(elGuests.value);
+  const per = current.unit === "bed" ? Math.min(g, current.beds) : 1;
+  const name = document.getElementById("gName").value.trim() || "(name)";
+  const mail = document.getElementById("gEmail").value.trim() || "(email)";
+  const note = document.getElementById("gNote").value.trim();
+  return [
+    "Booking request — Mediterraneo Youth Hostel",
+    `Room: ${current.name}${per > 1 ? ` (${per} beds)` : ""}`,
+    `Dates: ${pretty(elIn.value)} → ${pretty(elOut.value)} (${nt} night${nt > 1 ? "s" : ""})`,
+    `Guests: ${g}`,
+    `Total: ${gs(current.price * nt * per)}`,
+    `Name: ${name}`, `Email: ${mail}`,
+    note ? `Note: ${note}` : null
+  ].filter(Boolean).join("\n");
+}
+
+document.getElementById("roomList").addEventListener("click", e => {
+  const b = e.target.closest("[data-book]");
+  if (!b || b.disabled) return;
+  openBooking(ROOMS.find(r => r.id === b.dataset.book));
+});
+document.getElementById("closeDlg").addEventListener("click", () => dlg.close());
+document.getElementById("copyReq").addEventListener("click", async () => {
+  try { await navigator.clipboard.writeText(requestText());
+    sentMsg.textContent = "Copied"; }
+  catch { sentMsg.textContent = "Select the text above and copy it"; }
+  sentMsg.style.color = "var(--ok)";
+  sentMsg.hidden = false;
+});
+
+/* ============================================================
+   Il registro delle richieste.
+
+   Su GitHub Pages non c'e' un server: la pagina e' un file e basta.
+   Quindi ogni Prenota va a finire in un foglio Google, scritto da uno
+   script di tre righe (site/apps-script/Codice.gs). Da quel foglio
+   esce l'Excel, con `tools/prenotazioni_sito.py --csv`.
+
+   Finche' BOOKINGS_ENDPOINT e' vuoto, il tasto non finge: copia la
+   richiesta e la apre su WhatsApp, e lo dice.
+   ============================================================ */
+document.getElementById("sendReq").addEventListener("click", async () => {
+  const form = document.getElementById("bookForm");
+  if (!form.reportValidity()) return;
+
+  const btn = document.getElementById("sendReq");
+  const nt = nights();
+  const g = Number(elGuests.value);
+  const per = current.unit === "bed" ? Math.min(g, current.beds) : 1;
+  const now = new Date();
+  const riga = {
+    receivedAt: now.toISOString(),
+    status: "new",
+    roomId: current.id,
+    room: current.name,
+    unit: current.unit,
+    checkin: elIn.value,
+    checkout: elOut.value,
+    nights: nt,
+    guests: g,
+    unitsBooked: per,
+    pricePerUnit: current.price,
+    total: current.price * nt * per,
+    currency: "PYG",
+    guestName: document.getElementById("gName").value.trim(),
+    guestEmail: document.getElementById("gEmail").value.trim(),
+    note: document.getElementById("gNote").value.trim(),
+    source: "website"
+  };
+
+  function ringrazia() {
+    document.querySelector(".d-body").innerHTML =
+      `<div class="summary"><b>Thank you, ${riga.guestName.split(" ")[0] || "and see you soon"}.</b>
+       <span>Your request is with us. We answer by message, usually the same day —
+       nothing is charged until we have confirmed the room.</span></div>`;
+    document.getElementById("dlgTitle").textContent = "Request received";
+    btn.textContent = "Close";
+    btn.disabled = false;
+    btn.onclick = () => dlg.close();
+    document.getElementById("copyReq").hidden = true;
+    document.getElementById("closeDlg").hidden = true;
+  }
+
+  /* Se il registro non c'e' ancora, la richiesta non si perde:
+     va su WhatsApp, gia' scritta. */
+  function aMano(perche) {
+    btn.disabled = false; btn.textContent = "Send request";
+    const testo = requestText();
+    navigator.clipboard?.writeText(testo).catch(() => {});
+    if (CONTACT.whatsapp) {
+      window.open(`https://wa.me/${CONTACT.whatsapp.replace(/[^\d]/g, "")}`
+                  + `?text=${encodeURIComponent(testo)}`, "_blank", "noopener");
+      sentMsg.textContent = "Opening WhatsApp with your request — send it and we will answer.";
+    } else if (CONTACT.email) {
+      window.location.href = `mailto:${CONTACT.email}`
+        + `?subject=${encodeURIComponent("Booking request · " + current.name)}`
+        + `&body=${encodeURIComponent(testo)}`;
+      sentMsg.textContent = "Opening your mail app with the request.";
+    } else {
+      sentMsg.textContent = perche;
+    }
+    sentMsg.style.color = "var(--warn)";
+    sentMsg.hidden = false;
+  }
+
+  if (!BOOKINGS_ENDPOINT) {
+    aMano("The request is copied — please send it to us.");
+    return;
+  }
+
+  btn.disabled = true; btn.textContent = "Sending…";
+  try {
+    /* Corpo di testo semplice, niente header aggiunti: cosi' il browser
+       non chiede il permesso prima (preflight), che Apps Script non sa dare. */
+    const r = await fetch(BOOKINGS_ENDPOINT, { method: "POST", body: JSON.stringify(riga) });
+    if (!r.ok) throw new Error(r.status);
+    ringrazia();
+  } catch {
+    aMano("Could not reach our booking desk — the request is copied, please send it to us.");
+  }
+});
+
+/* ============================================================
+   il meteo — Open-Meteo, senza chiave e senza account.
+   La pagina scrive prima la riga del settembre tipico; le
+   letture vere la sostituiscono quando, e solo se, arrivano.
+   ============================================================ */
+const elWxTemp   = document.getElementById("wxTemp");
+const elWxPhrase = document.getElementById("wxPhrase");
+const elWxDetail = document.getElementById("wxDetail");
+const elWxDays   = document.getElementById("wxDays");
+const elWxSrc    = document.getElementById("wxSrc");
+
+(function wxTypical() {
+  elWxTemp.textContent = "25°";
+  elWxPhrase.textContent = "Spring in Asunción";
+  elWxDetail.textContent = "Typical September: warm afternoons, cool nights, the odd thunderstorm.";
+  elWxSrc.textContent = "Typical September weather. Live readings appear when the forecast is available.";
+})();
+
+/* I codici WMO, detti a parole. */
+const WMO = {
+  0:"Clear sky", 1:"Mainly clear", 2:"Partly cloudy", 3:"Overcast",
+  45:"Fog", 48:"Freezing fog",
+  51:"Light drizzle", 53:"Drizzle", 55:"Heavy drizzle",
+  56:"Freezing drizzle", 57:"Freezing drizzle",
+  61:"Light rain", 63:"Rain", 65:"Heavy rain",
+  66:"Freezing rain", 67:"Freezing rain",
+  71:"Light snow", 73:"Snow", 75:"Heavy snow", 77:"Snow grains",
+  80:"Light showers", 81:"Showers", 82:"Heavy showers",
+  85:"Snow showers", 86:"Snow showers",
+  95:"Thunderstorm", 96:"Thunderstorm with hail", 99:"Thunderstorm with hail"
+};
+const wmo = c => WMO[c] ?? "";
+
+(async () => {
+  const url = "https://api.open-meteo.com/v1/forecast"
+    + `?latitude=${HOSTEL.lat.toFixed(4)}&longitude=${HOSTEL.lon.toFixed(4)}`
+    + "&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,weather_code"
+    + "&daily=weather_code,temperature_2m_max,temperature_2m_min"
+    + "&timezone=America%2FAsuncion&forecast_days=5";
+
+  let d;
+  try {
+    const r = await fetch(url);
+    if (!r.ok) throw new Error(r.status);
+    d = await r.json();
+  } catch { return; }          /* niente rete, niente bugie: resta il settembre tipico */
+
+  const c = d.current;
+  if (c) {
+    elWxTemp.textContent   = `${Math.round(c.temperature_2m)}°`;
+    elWxPhrase.textContent = wmo(c.weather_code);
+    const bits = [];
+    if (c.apparent_temperature != null)  bits.push(`Feels like ${Math.round(c.apparent_temperature)}°`);
+    if (c.relative_humidity_2m != null)  bits.push(`${Math.round(c.relative_humidity_2m)}% humidity`);
+    if (c.wind_speed_10m != null)        bits.push(`wind ${Math.round(c.wind_speed_10m)} km/h`);
+    elWxDetail.textContent = bits.join(" · ");
+    const ora = c.time ? c.time.slice(11, 16) : "";
+    elWxSrc.textContent = `Open-Meteo${ora ? ` · local time ${ora}` : ""}`;
+  }
+
+  const g = d.daily;
+  if (g?.time?.length) {
+    const nomi = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    elWxDays.innerHTML = g.time.slice(1, 5).map((giorno, k) => {
+      const j = k + 1;
+      const w = new Date(giorno + "T12:00:00").getUTCDay();
+      return `
+      <div class="wx-day">
+        <span class="d">${nomi[w]}</span>
+        <span class="t">${Math.round(g.temperature_2m_max[j])}° <i>${Math.round(g.temperature_2m_min[j])}°</i></span>
+        <span class="p">${wmo(g.weather_code[j])}</span>
+      </div>`;
+    }).join("");
+  }
+})();
+
+/* ---------- la riga di servizio in fondo alla pagina ---------- */
+(function nota() {
+  const manca = [];
+  if (!BOOKINGS_ENDPOINT) manca.push("l'indirizzo del registro (<code>BOOKINGS_ENDPOINT</code>)");
+  if (!CONTACT.whatsapp && !CONTACT.email) manca.push("i contatti (<code>CONTACT</code>)");
+  if (ROOMS.some(r => r.photos.some(f => !f.src))) manca.push("le foto delle camere");
+
+  const testa = `Availability last checked ${AVAILABILITY_CHECKED}. `;
+  if (!manca.length) {
+    document.getElementById("setupNote").innerHTML =
+      testa + "Booking requests go straight into our register.";
+    return;
+  }
+  const elenco = manca.length === 1 ? manca[0]
+               : manca.slice(0, -1).join(", ") + " e " + manca[manca.length - 1];
+  document.getElementById("setupNote").innerHTML =
+    testa + `<b>Prima che questa pagina vada online</b>, manca ancora: ${elenco}. `
+    + (BOOKINGS_ENDPOINT ? "" :
+       "Finche' manca il registro, il tasto Prenota apre WhatsApp con la richiesta gia' scritta.");
+})();
+</script>
+</body>
+</html>
