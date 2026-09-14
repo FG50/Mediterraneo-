@@ -1,7 +1,8 @@
 # Il sito di Mediterraneo
 
-Una pagina sola, `site/index.html`, senza niente da compilare. GitHub Pages
-la pubblica ogni volta che cambia.
+Una pagina sola, `index.html`, senza niente da compilare. GitHub Pages la
+pubblica ogni volta che cambia: si spinge il file, e dopo un minuto e'
+online. Non c'e' nessuna Action di mezzo.
 
 Questo repository e' **pubblico apposta**: un sito lo deve vedere il mondo, e
 Pages gratis vuole un repository pubblico. Qui dentro non c'e' niente dei
@@ -38,7 +39,7 @@ dentro un foglio Google.
 1. Vai su [sheets.new](https://sheets.new) e chiama il foglio
    *Prenotazioni sito*.
 2. **Estensioni → Apps Script**. Cancella quello che c'e' e incolla tutto
-   `site/apps-script/Codice.gs`. Salva.
+   `apps-script/Codice.gs`. Salva.
 3. **Esegui il deployment → Nuovo deployment**, tipo **App web**, con
    *Esegui come*: **Me**, e *Chi ha accesso*: **Chiunque**.
 4. Copia l'indirizzo che ti da (finisce per `/exec`) e mettilo in
@@ -55,7 +56,7 @@ richiesta e apre WhatsApp gia' scritta.
 
 In `ROOMS`, dentro `photos`, ogni foto e' `{ src: "...", alt: "..." }`.
 Finche' `src` manca, al suo posto compare un riquadro con scritto cosa
-dovrebbe esserci. Le immagini si possono mettere in `site/foto/` e
+dovrebbe esserci. Le immagini si possono mettere in `foto/` e
 richiamare come `foto/camerata-1.jpg`.
 
 ## Dall'Excel del foglio all'Excel che si legge
@@ -76,12 +77,16 @@ riga si incolla la' senza spostare niente.
 
 ## Come si pubblica
 
-C'e' gia' `.github/workflows/pages.yml`: a ogni push che cambia `site/`,
-GitHub ripubblica. Una volta sola, all'inizio, bisogna accendere Pages:
+Si spinge su `main`, e basta. Pages e' impostato cosi':
 
-**Settings → Pages → Build and deployment → Source: GitHub Actions.**
+**Settings → Pages → Build and deployment → Source: Deploy from a branch,
+ramo `main`, cartella `/ (root)`.**
 
-L'indirizzo e' `https://fg50.github.io/Mediterraneo-/`.
+L'indirizzo e' `https://fg50.github.io/Mediterraneo-/`. Il primo giro dopo
+il Save ci mette un paio di minuti; i successivi, meno di uno.
+
+`.nojekyll` c'e' apposta: dice a GitHub di servire i file come stanno,
+senza passarli da Jekyll.
 
 ## Le mappe: perche' OpenStreetMap e non Google
 
