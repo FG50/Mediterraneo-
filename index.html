@@ -560,14 +560,18 @@ const PLACES = [
   { name: "Biggie Express", kind: "Supermarket", icon: "market",
     where: "Mcal. Estigarribia, between Independencia Nacional and Yegros",
     note: "Open 24 hours — the one to know when you arrive late." },
+  /* Stock sta dentro il Mall: stesso punto, quindi un pallino solo.
+     `dentro` dice da chi prende le coordinate e a chi lascia il pallino. */
   { name: "Stock", kind: "Supermarket", icon: "market",
-    where: "Inside Mall Excelsior, Chile y Manduvirá",
+    where: "Inside Mall Excelsior, Chile y Manduvirá", dentro: "Mall Excelsior",
     note: "A full supermarket, for a proper shop rather than a snack." },
   { name: "Mall Excelsior", kind: "Shopping centre", icon: "mall",
-    where: "Chile y Manduvirá",
-    note: "Paraguay's first shopping centre, and the one inside the old town: shops, food court, cinema." },
+    where: "Manduvirá, between our street and Chile",
+    lat: -25.287710, lon: -57.638732,
+    note: "Paraguay's first shopping centre, and the one inside the old town: shops, food court, cinema. Two minutes from our door." },
   { name: "Bar La Esquina", kind: "Lunch buffet", icon: "restaurant",
     where: "14 de Mayo y Gral. Díaz",
+    lat: -25.282938, lon: -57.638188,
     note: "Self-service buffet from 13:00, two floors. Monday to Friday and Sunday, 08:00–16:00; closed Saturday." },
   { name: "Iglesia San Francisco de Asís", kind: "Church", icon: "church",
     where: "Herrera 363, between Caballero and Iturbe",
@@ -635,9 +639,17 @@ const iconSVG = (name, size, stroke) =>
   const list = document.getElementById("poiList");
   const box  = document.getElementById("map");
 
-  const pts = PLACES.filter(p => p.lat && p.lon)
+  /* Chi sta dentro un altro posto ne eredita le coordinate: la distanza
+     e' la stessa, ed e' giusto che lo sia. Il pallino pero' resta uno. */
+  const conPosto = PLACES.map(p => {
+    if (!p.dentro) return p;
+    const ospite = PLACES.find(x => x.name === p.dentro);
+    return ospite ? { ...p, lat: ospite.lat, lon: ospite.lon } : p;
+  });
+
+  const pts = conPosto.filter(p => p.lat && p.lon)
     .map((p, i) => ({ ...p, i, m: metres(p) }));
-  const senzaPunto = PLACES.filter(p => !(p.lat && p.lon));
+  const senzaPunto = conPosto.filter(p => !(p.lat && p.lon));
   const segni = {};
 
   /* Il link a Google Maps: sulle coordinate se le abbiamo misurate,
@@ -665,9 +677,18 @@ const iconSVG = (name, size, stroke) =>
   list.innerHTML = [...pts].sort((a, c) => a.m - c.m).map(riga).join("")
                  + senzaPunto.map(riga).join("");
 
+  /* Una riga senza pallino proprio (Stock) illumina quello che la ospita. */
+  const pallino = i => {
+    const p = pts.find(x => String(x.i) === String(i));
+    if (!p) return null;
+    if (!p.dentro) return segni[i];
+    const ospite = pts.find(x => x.name === p.dentro);
+    return ospite ? segni[ospite.i] : null;
+  };
+
   function focus(i, on) {
     list.querySelector(`.poi[data-i="${i}"]`)?.classList.toggle("on", on);
-    segni[i]?.getElement()?.querySelector(".pin")?.classList.toggle("on", on);
+    pallino(i)?.getElement()?.querySelector(".pin")?.classList.toggle("on", on);
   }
 
   list.querySelectorAll(".poi[data-i]").forEach(b => {
@@ -676,9 +697,10 @@ const iconSVG = (name, size, stroke) =>
     b.addEventListener("mouseleave", () => focus(i, false));
     /* un clic sulla riga porta la mappa sul posto; il link se ne va per conto suo */
     b.addEventListener("click", e => {
-      if (e.target.closest("a") || !segni[i]) return;
-      mappa.flyTo(segni[i].getLatLng(), Math.max(mappa.getZoom(), 16), { duration: .6 });
-      segni[i].openPopup();
+      const mk = pallino(i);
+      if (e.target.closest("a") || !mk) return;
+      mappa.flyTo(mk.getLatLng(), Math.max(mappa.getZoom(), 16), { duration: .6 });
+      mk.openPopup();
     });
   });
 
@@ -734,7 +756,7 @@ const iconSVG = (name, size, stroke) =>
     }).addTo(mappa);
   });
 
-  pts.forEach(p => {
+  pts.filter(p => !p.dentro).forEach(p => {
     const mk = L.marker([p.lat, p.lon], { icon: icona("#E2495F", p.icon, 1), riseOnHover: true })
       .addTo(mappa)
       .bindPopup(`<b>${p.name}</b>${p.where ? p.where + "<br>" : ""}
