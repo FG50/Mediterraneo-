@@ -64,35 +64,19 @@ input,select,textarea,button{font:inherit;color:inherit}
 
 /* ---------- la striscia che scorre ---------- */
 @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.tick{background:var(--ink);color:var(--yellow);overflow:hidden}
-.marq{
-  display:inline-flex;white-space:nowrap;padding-block:7px;
-  font-size:12px;letter-spacing:.06em;text-transform:uppercase;
-  animation:marquee 34s linear infinite;
+.tick{background:var(--ink);overflow:hidden;border-bottom:3px solid var(--ink)}
+.marq{display:inline-flex;white-space:nowrap;animation:marquee 46s linear infinite}
+.marq b{
+  font-weight:400;font-size:12px;letter-spacing:.06em;text-transform:uppercase;
+  padding:7px 20px;
 }
-.marq span{padding-inline:22px}
+.marq .r{background:var(--red);color:#FFFFFF}
+.marq .w{background:#FFFFFF;color:var(--ink)}
+.marq .b{background:var(--blue);color:#FFFFFF}
 @media (prefers-reduced-motion:reduce){ .marq{animation:none} }
 
-/* ---------- testa ---------- */
-.top{position:sticky;top:0;z-index:40;background:var(--bg);border-bottom:3px solid var(--ink)}
-.top-in{display:flex;align-items:center;gap:14px;min-height:56px;flex-wrap:wrap;padding-block:9px}
-.brand{display:flex;align-items:center;gap:9px;text-decoration:none;margin-right:auto}
-.brand .mark{
-  width:30px;height:30px;display:grid;place-items:center;flex:none;
-  background:var(--ink);color:var(--yellow);border:2px solid var(--ink);
-}
-.brand b{font-family:"Zilla Slab",Georgia,serif;font-weight:700;font-size:21px;text-transform:uppercase}
-.brand span{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase}
-nav.jump{display:flex;border:2px solid var(--ink);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase}
-nav.jump a{
-  text-decoration:none;color:var(--ink);padding:8px 13px;white-space:nowrap;flex:none;
-  border-right:2px solid var(--ink);
-}
-nav.jump a:last-child{border-right:0}
-nav.jump a:hover{background:var(--ink);color:var(--yellow)}
-
 /* ---------- le date ---------- */
-.searchbar{position:sticky;top:59px;z-index:30;background:var(--bg);border-bottom:3px solid var(--ink)}
+.searchbar{position:sticky;top:0;z-index:30;background:var(--bg);border-bottom:3px solid var(--ink)}
 .search-in{display:flex;align-items:flex-end;flex-wrap:wrap;gap:12px;padding-block:14px}
 .search-fields{display:flex;gap:12px;flex-wrap:wrap}
 .field{display:flex;flex-direction:column;gap:5px;min-width:140px}
@@ -105,6 +89,9 @@ nav.jump a:hover{background:var(--ink);color:var(--yellow)}
 .stay-note{font-size:12.5px;padding-bottom:10px;margin-left:auto}
 .stay-note b{font-variant-numeric:tabular-nums}
 .stay-note .ask{color:var(--muted)}
+@keyframes chiama{0%,100%{background:transparent}30%{background:var(--yellow)}}
+.stay-note.chiama{animation:chiama 1.4s ease}
+@media (prefers-reduced-motion:reduce){ .stay-note.chiama{animation:none;background:var(--yellow)} }
 
 /* ---------- l'apertura ---------- */
 .hero{padding-block:30px 26px;border-bottom:3px solid var(--ink)}
@@ -113,9 +100,14 @@ nav.jump a:hover{background:var(--ink);color:var(--yellow)}
 .hero h1{font-size:clamp(30px,6.4vw,84px);letter-spacing:-.01em;line-height:1.15}
 .hero h1 .r{color:var(--red)}
 .hero h1 .b{color:var(--blue)}
-.hero h1 .box{
-  display:inline-block;background:var(--bg);color:var(--ink);padding:2px 10px;margin-block:4px;
-  transform:rotate(-1.4deg);box-shadow:0 0 0 3px var(--ink) inset;
+/* Il bianco della bandiera, su un fondo quasi bianco, si vede solo se ha
+   un contorno. Dove il contorno non c'e', la lettera resta blu notte
+   invece di sparire. */
+.hero h1 .w{color:var(--ink)}
+@supports (-webkit-text-stroke: 2px #12213E){
+  .hero h1 .w{
+    color:#FFFFFF;-webkit-text-stroke:2.5px var(--ink);paint-order:stroke fill;
+  }
 }
 .hero-say{margin-top:22px;border-top:2px solid var(--ink);padding-top:16px}
 .cta{display:flex;gap:8px;flex-wrap:wrap;align-self:end}
@@ -152,7 +144,7 @@ nav.jump a:hover{background:var(--ink);color:var(--yellow)}
 .direct strong{font-weight:700}
 
 /* ---------- il quartiere ---------- */
-.hood{padding-block:30px;border-bottom:3px solid var(--ink);scroll-margin-top:162px}
+.hood{padding-block:30px;border-bottom:3px solid var(--ink);scroll-margin-top:104px}
 .hood-head{margin-bottom:18px;max-width:64ch}
 .hood-head h2{font-size:clamp(24px,4vw,40px)}
 .hood-head p{font-size:12.5px;color:var(--muted);margin-top:10px}
@@ -233,7 +225,7 @@ nav.jump a:hover{background:var(--ink);color:var(--yellow)}
 .rooms{padding-block:0 40px;display:flex;flex-direction:column;counter-reset:room}
 .room{
   display:grid;grid-template-columns:4.4ch minmax(0,1fr);gap:14px 20px;align-items:start;
-  border-bottom:2px solid var(--ink);padding-block:26px;scroll-margin-top:162px;
+  border-bottom:2px solid var(--ink);padding-block:26px;scroll-margin-top:104px;
 }
 .room::before{
   content:counter(room,decimal-leading-zero);counter-increment:room;
@@ -348,15 +340,13 @@ footer ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:6px}
 
 @media (max-width:1179px){
   .searchbar{position:static}
-  .room,.hood{scroll-margin-top:70px}
+  .room,.hood{scroll-margin-top:16px}
 }
 @media (max-width:999px){
   .stay-note{margin-left:0;width:100%}
 }
 @media (max-width:760px){
-  nav.jump{order:3;width:100%;overflow-x:auto;scrollbar-width:none}
-  nav.jump::-webkit-scrollbar{display:none}
-  .room,.hood{scroll-margin-top:114px}
+  .room,.hood{scroll-margin-top:16px}
 }
 @media (max-width:640px){
   .room{grid-template-columns:1fr}
@@ -373,28 +363,8 @@ footer ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:6px}
 </head>
 <body>
 <div class="tick" aria-hidden="true">
-  <div class="marq"><span>★ Book direct — no commission ★ Six rooms in the old town ★ Reception open 24 hours ★ Everything on foot ★ Book direct — no commission ★ Six rooms in the old town ★ Reception open 24 hours ★ Everything on foot </span><span>★ Book direct — no commission ★ Six rooms in the old town ★ Reception open 24 hours ★ Everything on foot ★ Book direct — no commission ★ Six rooms in the old town ★ Reception open 24 hours ★ Everything on foot </span></div>
+  <div class="marq"><b class="r">★ Book direct — no commission</b><b class="w">★ Six rooms in the old town</b><b class="b">★ Reception open 24 hours</b><b class="r">★ Everything on foot</b><b class="w">★ Taxes in, nothing at the desk</b><b class="b">★ We answer the same day</b><b class="r">★ Book direct — no commission</b><b class="w">★ Six rooms in the old town</b><b class="b">★ Reception open 24 hours</b><b class="r">★ Everything on foot</b><b class="w">★ Taxes in, nothing at the desk</b><b class="b">★ We answer the same day</b></div>
 </div>
-<header class="top">
-  <div class="wrap top-in">
-    <a class="brand" href="#top">
-      <span class="mark" aria-hidden="true">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17v-5a2 2 0 0 1 2-2h11a4 4 0 0 1 4 4v3"/><path d="M3 20v-3M21 20v-3M3 13h18"/><circle cx="7.5" cy="8.5" r="1.8"/></svg>
-      </span>
-      <b>Mediterraneo</b><span>[ASU]</span>
-    </a>
-    <nav class="jump" aria-label="Sections">
-      <a href="#hood">Around us</a>
-      <a href="#mixed">Mixed</a>
-      <a href="#female">Female</a>
-      <a href="#male">Male</a>
-      <a href="#triple">Triple</a>
-      <a href="#twin">Twin</a>
-      <a href="#ensuite">Ensuite</a>
-    </nav>
-  </div>
-</header>
-
 <div class="searchbar">
   <div class="wrap search-in">
     <div class="search-fields">
@@ -412,9 +382,9 @@ footer ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:6px}
   <section class="wrap hero">
     <div class="hero-grid">
       <div>
-        <h1>
-          <span class="r">Mediterraneo</span><br>
-          <span class="box">Hostel</span>
+        <h1 aria-label="Mediterraneo Hostel">
+          <span aria-hidden="true"><span class="r">M</span><span class="w">e</span><span class="b">d</span><span class="r">i</span><span class="w">t</span><span class="b">e</span><span class="r">r</span><span class="w">r</span><span class="b">a</span><span class="r">n</span><span class="w">e</span><span class="b">o</span></span><br>
+          <span aria-hidden="true"><span class="r">H</span><span class="w">o</span><span class="b">s</span><span class="r">t</span><span class="w">e</span><span class="b">l</span></span>
         </h1>
         <div class="hero-say">
           <div class="cta">
@@ -928,10 +898,8 @@ const elNote = document.getElementById("stayNote");
 
 (function seedDates() {
   const t = new Date();
-  const a = new Date(Date.UTC(t.getFullYear(), t.getMonth(), t.getDate() + 1));
-  const b = new Date(Date.UTC(t.getFullYear(), t.getMonth(), t.getDate() + 3));
-  elIn.value = iso(a); elOut.value = iso(b);
-  elIn.min = iso(new Date(Date.UTC(t.getFullYear(), t.getMonth(), t.getDate())));
+  const oggi = iso(new Date(Date.UTC(t.getFullYear(), t.getMonth(), t.getDate())));
+  elIn.min = oggi; elOut.min = oggi;
 })();
 
 function nights() {
@@ -1036,6 +1004,7 @@ function refresh() {
   const g = Number(elGuests.value);
   elNote.innerHTML = nt
     ? `<b>${nt}</b> night${nt > 1 ? "s" : ""} · ${pretty(elIn.value)} → ${pretty(elOut.value)} · <b>${g}</b> guest${g > 1 ? "s" : ""}`
+    : !elIn.value ? "Pick your dates and we work out the total."
     : "Pick a check-out date after your check-in.";
   if (nt) elNote.innerHTML += ' · <span class="ask">we reply with the room, usually the same day</span>';
 
@@ -1059,7 +1028,7 @@ function refresh() {
   });
 }
 [elIn, elOut, elGuests].forEach(el => el.addEventListener("change", () => {
-  if (Date.parse(elOut.value) <= Date.parse(elIn.value)) {
+  if (elIn.value && elOut.value && Date.parse(elOut.value) <= Date.parse(elIn.value)) {
     const a = new Date(elIn.value + "T00:00:00Z");
     a.setUTCDate(a.getUTCDate() + 1);
     elOut.value = iso(a);
@@ -1078,6 +1047,14 @@ const sentMsg = document.getElementById("sentMsg");
 let current = null;
 
 function openBooking(room) {
+  if (!nights()) {
+    const manca = elIn.value ? elOut : elIn;
+    document.querySelector(".searchbar").scrollIntoView({ block: "center", behavior: "smooth" });
+    manca.focus();
+    elNote.classList.add("chiama");
+    setTimeout(() => elNote.classList.remove("chiama"), 1400);
+    return;
+  }
   current = room;
   const nt = nights();
   const g = Number(elGuests.value);
