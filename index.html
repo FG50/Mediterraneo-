@@ -64,15 +64,15 @@ input,select,textarea,button{font:inherit;color:inherit}
 
 /* ---------- la striscia che scorre ---------- */
 @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.tick{background:var(--ink);overflow:hidden;border-bottom:3px solid var(--ink)}
+.tick{background:var(--bg);overflow:hidden;border-bottom:3px solid var(--ink)}
 .marq{display:inline-flex;white-space:nowrap;animation:marquee 46s linear infinite}
 .marq b{
-  font-weight:400;font-size:12px;letter-spacing:.06em;text-transform:uppercase;
-  padding:7px 20px;
+  font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase;
+  padding:8px 20px;
 }
-.marq .r{background:var(--red);color:#FFFFFF}
-.marq .w{background:#FFFFFF;color:var(--ink)}
-.marq .b{background:var(--blue);color:#FFFFFF}
+.marq .r{color:var(--red)}
+.marq .w{color:var(--ink)}
+.marq .b{color:var(--blue)}
 @media (prefers-reduced-motion:reduce){ .marq{animation:none} }
 
 /* ---------- le date ---------- */
@@ -198,6 +198,10 @@ input,select,textarea,button{font:inherit;color:inherit}
   grid-column:3;grid-row:1;font-size:10.5px;white-space:nowrap;
   font-variant-numeric:tabular-nums;justify-self:end;
 }
+.poi .cerca{
+  text-decoration:none;letter-spacing:.06em;text-transform:uppercase;font-weight:700;color:var(--blue);
+}
+.poi .cerca:hover{color:var(--red);text-decoration:underline}
 .poi .nm{
   grid-column:2/4;grid-row:2;font-family:"Zilla Slab",Georgia,serif;font-size:15.5px;
   font-weight:700;text-transform:uppercase;line-height:1.2;
@@ -766,7 +770,10 @@ const iconSVG = (name, size, stroke) =>
       <summary>
         <span class="ico">${iconSVG(p.icon, 18, 2)}</span>
         <span class="kind">${p.kind}</span>
-        <span class="far">${p.m !== undefined ? `${showDist(p.m)} · ${showWalk(p.m)}` : ""}</span>
+        ${p.m !== undefined
+          ? `<span class="far">${showDist(p.m)} · ${showWalk(p.m)}</span>`
+          : `<a class="far cerca" href="${gmap(p)}" target="_blank" rel="noopener"
+                title="${p.name} in Google Maps">Find it →</a>`}
         <span class="nm">${p.name}</span>
         <svg class="caret" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
              stroke-width="3" stroke-linecap="square" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
