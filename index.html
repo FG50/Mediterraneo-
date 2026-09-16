@@ -156,8 +156,9 @@ input,select,textarea,button{font:inherit;color:inherit}
    vuole verificare. */
 .stella{
   font-family:"Zilla Slab",Georgia,serif;font-size:22px;line-height:1;color:var(--ink);
-  text-decoration:none;margin-left:2px;align-self:flex-start;
+  text-decoration:none;margin-left:2px;align-self:flex-start;position:relative;
 }
+.stella::after{content:"";position:absolute;inset:-11px -10px}
 .stella:hover{color:var(--red)}
 .perche{margin-top:12px;scroll-margin-top:24px}
 .perche b{color:var(--ink)}
