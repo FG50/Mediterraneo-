@@ -152,17 +152,7 @@ input,select,textarea,button{font:inherit;color:inherit}
 }
 .direct svg{flex:none}
 .direct strong{font-weight:700;font-size:14.5px}
-/* L'asterisco porta alla spiegazione in fondo alla pagina, per chi la
-   vuole verificare. */
-.stella{
-  font-family:"Zilla Slab",Georgia,serif;font-size:22px;line-height:1;color:var(--ink);
-  text-decoration:none;margin-left:2px;align-self:flex-start;position:relative;
-}
-.stella::after{content:"";position:absolute;inset:-11px -10px}
-.stella:hover{color:var(--red)}
-.perche{margin-top:12px;scroll-margin-top:24px}
-.perche b{color:var(--ink)}
-.perche:target{background:var(--yellow);box-shadow:0 0 0 6px var(--yellow)}
+
 
 /* ---------- il quartiere ---------- */
 .hood{padding-block:30px;border-bottom:3px solid var(--ink);scroll-margin-top:18px}
@@ -439,8 +429,7 @@ footer ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:6px}
         </div>
         <p class="direct">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><path d="M12 21s-7-4.6-7-10a7 7 0 0 1 14 0c0 5.4-7 10-7 10z"/><path d="M9.5 12.2l1.8 1.8 3.4-3.6"/></svg>
-          <strong>Booking here costs you less.</strong><a class="stella" href="#perche"
-             aria-label="Why booking here costs you less">*</a>
+          <strong>Booking here costs you less.</strong>
         </p>
       </div>
       <div class="ritratto">
@@ -648,9 +637,6 @@ footer ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:6px}
       <h3>Payment</h3>
       <p>Guaraníes in cash, or card at the desk. Nothing is charged when you send a request —
         we confirm the room first, and you pay on arrival.</p>
-      <p id="perche" class="perche"><b>*</b> Prices on this page are the whole price of the room —
-        taxes in, nothing added at the desk. Booking sites charge us a commission on every
-        reservation; when you write to us directly, that money stays out of the price.</p>
     </div>
   </div>
 </footer>
