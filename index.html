@@ -91,26 +91,6 @@ nav.jump a{
 nav.jump a:last-child{border-right:0}
 nav.jump a:hover{background:var(--ink);color:var(--yellow)}
 
-/* ---------- il tempo che fa ---------- */
-.wx{background:var(--card);border-bottom:3px solid var(--ink)}
-.wx-in{display:flex;align-items:center;gap:22px;flex-wrap:wrap;padding-block:13px}
-.wx-now{display:flex;align-items:center;gap:13px}
-.wx-temp{
-  font-family:"Zilla Slab",Georgia,serif;font-weight:700;font-size:36px;line-height:.9;
-  font-variant-numeric:tabular-nums;
-}
-.wx-meta{display:flex;flex-direction:column;gap:2px}
-.wx-place{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase}
-.wx-phrase{font-size:14px;font-weight:700}
-.wx-detail{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
-.wx-days{display:flex;gap:8px;flex-wrap:wrap;margin-left:auto}
-.wx-day{border:2px solid var(--ink);background:var(--bg);padding:6px 10px;min-width:96px;display:flex;flex-direction:column;gap:1px}
-.wx-day .d{font-size:10px;letter-spacing:.1em;text-transform:uppercase}
-.wx-day .t{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
-.wx-day .t i{font-style:normal;font-weight:400;color:var(--muted)}
-.wx-day .p{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:15ch}
-.wx-src{font-size:10.5px;color:var(--muted);width:100%}
-
 /* ---------- le date ---------- */
 .searchbar{position:sticky;top:59px;z-index:30;background:var(--bg);border-bottom:3px solid var(--ink)}
 .search-in{display:flex;align-items:flex-end;flex-wrap:wrap;gap:12px;padding-block:14px}
@@ -208,28 +188,17 @@ nav.jump a:hover{background:var(--ink);color:var(--yellow)}
   font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
 }
 .map-legend .k{display:inline-flex;align-items:center;gap:6px}
-.poi-list{
-  display:flex;flex-direction:column;border:2px solid var(--ink);border-bottom:0;
-  background:var(--bg);
-}
-/* A fianco della mappa l'elenco e' alto quanto lei e scorre per conto suo:
-   dodici posti di seguito facevano una colonna lunga il doppio. */
-@media (min-width:881px){
-  .hood-grid{align-items:stretch}
-  .poi-box{position:relative;min-height:100%}
-  .poi-list{position:absolute;inset:0;overflow:auto;scrollbar-width:thin;border-bottom:2px solid var(--ink)}
-  .poi-list::-webkit-scrollbar{width:10px}
-  .poi-list::-webkit-scrollbar-track{background:var(--card);border-left:2px solid var(--ink)}
-  .poi-list::-webkit-scrollbar-thumb{background:var(--ink)}
-}
-.poi{
+.poi-list{display:flex;flex-direction:column;border:2px solid var(--ink);border-bottom:0;background:var(--bg)}
+.poi{border-bottom:2px solid var(--ink)}
+.poi > summary{
   display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;gap:0 10px;align-items:baseline;
-  padding:8px 10px;border-bottom:2px solid var(--ink);cursor:pointer;
+  padding:7px 10px;cursor:pointer;list-style:none;
 }
-.poi:hover,.poi.on{background:var(--yellow)}
-.poi:not([data-i]){cursor:default}
+.poi > summary::-webkit-details-marker{display:none}
+.poi > summary:hover,.poi.on > summary{background:var(--yellow)}
+.poi:not([data-i]) > summary{cursor:pointer}
 .poi .ico{
-  grid-row:1/4;align-self:center;width:32px;height:32px;flex:none;
+  grid-row:1/3;align-self:center;width:30px;height:30px;flex:none;
   border:2px solid var(--ink);display:grid;place-items:center;background:var(--bg);
 }
 .poi .kind{grid-column:2;grid-row:1;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--red)}
@@ -241,12 +210,17 @@ nav.jump a:hover{background:var(--ink);color:var(--yellow)}
   grid-column:2/4;grid-row:2;font-family:"Zilla Slab",Georgia,serif;font-size:15.5px;
   font-weight:700;text-transform:uppercase;line-height:1.2;
 }
+.poi .caret{grid-column:4;grid-row:1/3;align-self:center;flex:none;transition:transform .15s}
+.poi[open] .caret{transform:rotate(180deg)}
+@media (prefers-reduced-motion:reduce){ .poi .caret{transition:none} }
+.poi-body{padding:0 10px 11px 52px;display:flex;flex-direction:column;align-items:flex-start;gap:9px}
+.poi .note{font-size:11.5px;color:var(--muted)}
 .poi .gmap{
-  grid-column:4;grid-row:1/3;align-self:center;width:26px;height:26px;flex:none;
-  border:2px solid var(--ink);display:grid;place-items:center;color:var(--ink);
+  font-size:10px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;
+  display:inline-flex;align-items:center;gap:5px;text-decoration:none;
+  border:2px solid var(--ink);padding:5px 9px;
 }
 .poi .gmap:hover{background:var(--ink);color:var(--yellow)}
-.poi .note{grid-column:2/5;grid-row:3;font-size:11.5px;color:var(--muted);margin-top:3px}
 
 /* ---------- le camere ---------- */
 .rooms-head{
@@ -372,16 +346,17 @@ footer ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:6px}
 .setup{border-top:2px solid var(--ink);padding-block:16px 32px;font-size:11.5px;color:var(--muted)}
 .setup code{background:var(--bg);border:2px solid var(--ink);padding:1px 5px;font-size:11px;font-family:inherit;color:var(--ink)}
 
-@media (max-width:999px){
+@media (max-width:1179px){
   .searchbar{position:static}
   .room,.hood{scroll-margin-top:70px}
+}
+@media (max-width:999px){
   .stay-note{margin-left:0;width:100%}
 }
 @media (max-width:760px){
   nav.jump{order:3;width:100%;overflow-x:auto;scrollbar-width:none}
   nav.jump::-webkit-scrollbar{display:none}
   .room,.hood{scroll-margin-top:114px}
-  .wx-days{margin-left:0;width:100%}
 }
 @media (max-width:640px){
   .room{grid-template-columns:1fr}
@@ -420,21 +395,6 @@ footer ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:6px}
   </div>
 </header>
 
-<div class="wx">
-  <div class="wrap wx-in">
-    <div class="wx-now">
-      <div class="wx-temp" id="wxTemp">—</div>
-      <div class="wx-meta">
-        <div class="wx-place">Asunción right now</div>
-        <div class="wx-phrase" id="wxPhrase">Loading the forecast…</div>
-        <div class="wx-detail" id="wxDetail"></div>
-      </div>
-    </div>
-    <div class="wx-days" id="wxDays"></div>
-    <div class="wx-src" id="wxSrc"></div>
-  </div>
-</div>
-
 <div class="searchbar">
   <div class="wrap search-in">
     <div class="search-fields">
@@ -453,10 +413,8 @@ footer ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:6px}
     <div class="hero-grid">
       <div>
         <h1>
-          <span class="r">A quiet</span><br>
-          <span class="box">house</span><br>
-          <span class="b">in the middle</span><br>
-          <span class="r">of Asunción</span>
+          <span class="r">Mediterraneo</span><br>
+          <span class="box">Hostel</span>
         </h1>
         <div class="hero-say">
           <div class="cta">
@@ -526,7 +484,7 @@ footer ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:6px}
   <section class="wrap hood" id="hood">
     <div class="hood-head">
       <h2>What is around the door</h2>
-      <p>Twelve places, closest first — scroll the list, or tap one to find it on the map.
+      <p>Twelve places, closest first — tap one to open it and find it on the map.
         Distances are straight-line from the front door; walking time counts 80 metres a minute,
         and the centre of Asunción is flat.</p>
     </div>
@@ -538,9 +496,7 @@ footer ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:6px}
           <span class="k"><svg width="11" height="14" viewBox="0 0 10 13" aria-hidden="true"><path d="M5 0C2.2 0 0 2.2 0 5c0 3.6 5 8 5 8s5-4.4 5-8c0-2.8-2.2-5-5-5z" fill="#C41B1B"/></svg> Places nearby</span>
         </div>
       </div>
-      <div class="poi-box">
-        <div class="poi-list" id="poiList"></div>
-      </div>
+      <div class="poi-list" id="poiList"></div>
     </div>
   </section>
 
@@ -836,19 +792,24 @@ const iconSVG = (name, size, stroke) =>
 
   /* ---------- l'elenco a fianco: non dipende dalla mappa ---------- */
   const riga = p => `
-    <div class="poi" ${p.m !== undefined ? `data-i="${p.i}"` : ""}>
-      <span class="ico">${iconSVG(p.icon, 18, 2)}</span>
-      <span class="kind">${p.kind}</span>
-      <span class="nm">${p.name}</span>
-      <span class="far">${p.m !== undefined ? `${showDist(p.m)} · ${showWalk(p.m)}` : ""}</span>
-      <a class="gmap" href="${gmap(p)}" target="_blank" rel="noopener"
-         title="${p.name} in Google Maps" aria-label="${p.name} in Google Maps">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M12 21s-7-4.6-7-10a7 7 0 0 1 14 0c0 5.4-7 10-7 10z"/><circle cx="12" cy="11" r="2.4"/>
-        </svg></a>
-      <span class="note">${p.where ? `<b>${p.where}.</b> ` : ""}${p.note}</span>
-    </div>`;
+    <details class="poi" name="posti" ${p.m !== undefined ? `data-i="${p.i}"` : ""}>
+      <summary>
+        <span class="ico">${iconSVG(p.icon, 18, 2)}</span>
+        <span class="kind">${p.kind}</span>
+        <span class="far">${p.m !== undefined ? `${showDist(p.m)} · ${showWalk(p.m)}` : ""}</span>
+        <span class="nm">${p.name}</span>
+        <svg class="caret" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="3" stroke-linecap="square" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </summary>
+      <div class="poi-body">
+        <p class="note">${p.where ? `<b>${p.where}.</b> ` : ""}${p.note}</p>
+        <a class="gmap" href="${gmap(p)}" target="_blank" rel="noopener">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 21s-7-4.6-7-10a7 7 0 0 1 14 0c0 5.4-7 10-7 10z"/><circle cx="12" cy="11" r="2.4"/>
+          </svg>Open in Google Maps</a>
+      </div>
+    </details>`;
   list.innerHTML = [...pts].sort((a, c) => a.m - c.m).map(riga).join("")
                  + senzaPunto.map(riga).join("");
 
@@ -1256,82 +1217,6 @@ document.getElementById("sendReq").addEventListener("click", async () => {
     aMano("Could not reach our booking desk — the request is copied, please send it to us.");
   }
 });
-
-/* ============================================================
-   il meteo — Open-Meteo, senza chiave e senza account.
-   La pagina scrive prima la riga del settembre tipico; le
-   letture vere la sostituiscono quando, e solo se, arrivano.
-   ============================================================ */
-const elWxTemp   = document.getElementById("wxTemp");
-const elWxPhrase = document.getElementById("wxPhrase");
-const elWxDetail = document.getElementById("wxDetail");
-const elWxDays   = document.getElementById("wxDays");
-const elWxSrc    = document.getElementById("wxSrc");
-
-(function wxTypical() {
-  elWxTemp.textContent = "25°";
-  elWxPhrase.textContent = "Spring in Asunción";
-  elWxDetail.textContent = "Typical September: warm afternoons, cool nights, the odd thunderstorm.";
-  elWxSrc.textContent = "Typical September weather. Live readings appear when the forecast is available.";
-})();
-
-/* I codici WMO, detti a parole. */
-const WMO = {
-  0:"Clear sky", 1:"Mainly clear", 2:"Partly cloudy", 3:"Overcast",
-  45:"Fog", 48:"Freezing fog",
-  51:"Light drizzle", 53:"Drizzle", 55:"Heavy drizzle",
-  56:"Freezing drizzle", 57:"Freezing drizzle",
-  61:"Light rain", 63:"Rain", 65:"Heavy rain",
-  66:"Freezing rain", 67:"Freezing rain",
-  71:"Light snow", 73:"Snow", 75:"Heavy snow", 77:"Snow grains",
-  80:"Light showers", 81:"Showers", 82:"Heavy showers",
-  85:"Snow showers", 86:"Snow showers",
-  95:"Thunderstorm", 96:"Thunderstorm with hail", 99:"Thunderstorm with hail"
-};
-const wmo = c => WMO[c] ?? "";
-
-(async () => {
-  const url = "https://api.open-meteo.com/v1/forecast"
-    + `?latitude=${HOSTEL.lat.toFixed(4)}&longitude=${HOSTEL.lon.toFixed(4)}`
-    + "&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,weather_code"
-    + "&daily=weather_code,temperature_2m_max,temperature_2m_min"
-    + "&timezone=America%2FAsuncion&forecast_days=5";
-
-  let d;
-  try {
-    const r = await fetch(url);
-    if (!r.ok) throw new Error(r.status);
-    d = await r.json();
-  } catch { return; }          /* niente rete, niente bugie: resta il settembre tipico */
-
-  const c = d.current;
-  if (c) {
-    elWxTemp.textContent   = `${Math.round(c.temperature_2m)}°`;
-    elWxPhrase.textContent = wmo(c.weather_code);
-    const bits = [];
-    if (c.apparent_temperature != null)  bits.push(`Feels like ${Math.round(c.apparent_temperature)}°`);
-    if (c.relative_humidity_2m != null)  bits.push(`${Math.round(c.relative_humidity_2m)}% humidity`);
-    if (c.wind_speed_10m != null)        bits.push(`wind ${Math.round(c.wind_speed_10m)} km/h`);
-    elWxDetail.textContent = bits.join(" · ");
-    const ora = c.time ? c.time.slice(11, 16) : "";
-    elWxSrc.textContent = `Open-Meteo${ora ? ` · local time ${ora}` : ""}`;
-  }
-
-  const g = d.daily;
-  if (g?.time?.length) {
-    const nomi = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    elWxDays.innerHTML = g.time.slice(1, 5).map((giorno, k) => {
-      const j = k + 1;
-      const w = new Date(giorno + "T12:00:00").getUTCDay();
-      return `
-      <div class="wx-day">
-        <span class="d">${nomi[w]}</span>
-        <span class="t">${Math.round(g.temperature_2m_max[j])}° <i>${Math.round(g.temperature_2m_min[j])}°</i></span>
-        <span class="p">${wmo(g.weather_code[j])}</span>
-      </div>`;
-    }).join("");
-  }
-})();
 
 /* ---------- la riga di servizio in fondo alla pagina ---------- */
 (function nota() {
