@@ -78,7 +78,8 @@ input,select,textarea,button{font:inherit;color:inherit}
 /* ---------- le date ---------- */
 .searchbar{position:sticky;top:0;z-index:30;background:var(--bg);border-bottom:3px solid var(--ink)}
 .search-in{display:flex;align-items:flex-end;flex-wrap:wrap;gap:12px;padding-block:14px}
-.search-fields{display:flex;gap:12px;flex-wrap:wrap}
+.search-fields{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}
+#topBook{align-self:flex-end}
 .field{display:flex;flex-direction:column;gap:5px;min-width:140px}
 .field label{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase}
 .field input,.field select{
@@ -86,7 +87,7 @@ input,select,textarea,button{font:inherit;color:inherit}
   font-size:13.5px;min-height:42px;width:100%;font-variant-numeric:tabular-nums;
 }
 .field input::-webkit-calendar-picker-indicator{filter:grayscale(1);cursor:pointer}
-.stay-note{font-size:12.5px;padding-bottom:10px;margin-left:auto}
+.stay-note{font-size:12.5px;width:100%;padding-top:2px}
 .stay-note b{font-variant-numeric:tabular-nums}
 .stay-note .ask{color:var(--muted)}
 @keyframes chiama{0%,100%{background:transparent}30%{background:var(--yellow)}}
@@ -99,15 +100,9 @@ input,select,textarea,button{font:inherit;color:inherit}
 @media (max-width:820px){ .hero-grid{grid-template-columns:1fr} }
 .hero h1{font-size:clamp(30px,6.4vw,84px);letter-spacing:-.01em;line-height:1.15}
 .hero h1 .r{color:var(--red)}
-.hero h1 .b{color:var(--blue)}
-/* Il bianco della bandiera, su un fondo quasi bianco, si vede solo se ha
-   un contorno. Dove il contorno non c'e', la lettera resta blu notte
-   invece di sparire. */
-.hero h1 .w{color:var(--ink)}
-@supports (-webkit-text-stroke: 2px #12213E){
-  .hero h1 .w{
-    color:#FFFFFF;-webkit-text-stroke:2.5px var(--ink);paint-order:stroke fill;
-  }
+.hero h1 .box{
+  display:inline-block;background:var(--bg);color:var(--ink);padding:2px 10px;margin-block:6px;
+  transform:rotate(-1.4deg);box-shadow:0 0 0 3px var(--ink) inset;
 }
 .hero-say{margin-top:22px;border-top:2px solid var(--ink);padding-top:16px}
 .cta{display:flex;gap:8px;flex-wrap:wrap;align-self:end}
@@ -144,7 +139,7 @@ input,select,textarea,button{font:inherit;color:inherit}
 .direct strong{font-weight:700}
 
 /* ---------- il quartiere ---------- */
-.hood{padding-block:30px;border-bottom:3px solid var(--ink);scroll-margin-top:104px}
+.hood{padding-block:30px;border-bottom:3px solid var(--ink);scroll-margin-top:137px}
 .hood-head{margin-bottom:18px;max-width:64ch}
 .hood-head h2{font-size:clamp(24px,4vw,40px)}
 .hood-head p{font-size:12.5px;color:var(--muted);margin-top:10px}
@@ -198,10 +193,7 @@ input,select,textarea,button{font:inherit;color:inherit}
   grid-column:3;grid-row:1;font-size:10.5px;white-space:nowrap;
   font-variant-numeric:tabular-nums;justify-self:end;
 }
-.poi .cerca{
-  text-decoration:none;letter-spacing:.06em;text-transform:uppercase;font-weight:700;color:var(--blue);
-}
-.poi .cerca:hover{color:var(--red);text-decoration:underline}
+.poi .far.circa{color:var(--muted)}
 .poi .nm{
   grid-column:2/4;grid-row:2;font-family:"Zilla Slab",Georgia,serif;font-size:15.5px;
   font-weight:700;text-transform:uppercase;line-height:1.2;
@@ -226,10 +218,10 @@ input,select,textarea,button{font:inherit;color:inherit}
 .rooms-head h2{font-size:clamp(24px,4vw,40px);display:flex;align-items:center;gap:10px}
 .rooms-head h2 svg{width:56px;height:39px;flex:none;image-rendering:pixelated}
 .rooms-head p{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase}
-.rooms{padding-block:0 40px;display:flex;flex-direction:column;counter-reset:room}
+.rooms{scroll-margin-top:137px;padding-block:0 40px;display:flex;flex-direction:column;counter-reset:room}
 .room{
   display:grid;grid-template-columns:4.4ch minmax(0,1fr);gap:14px 20px;align-items:start;
-  border-bottom:2px solid var(--ink);padding-block:26px;scroll-margin-top:104px;
+  border-bottom:2px solid var(--ink);padding-block:26px;scroll-margin-top:137px;
 }
 .room::before{
   content:counter(room,decimal-leading-zero);counter-increment:room;
@@ -346,9 +338,7 @@ footer ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:6px}
   .searchbar{position:static}
   .room,.hood{scroll-margin-top:16px}
 }
-@media (max-width:999px){
-  .stay-note{margin-left:0;width:100%}
-}
+
 @media (max-width:760px){
   .room,.hood{scroll-margin-top:16px}
 }
@@ -377,6 +367,7 @@ footer ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:6px}
       <div class="field"><label for="guests">Guests</label>
         <select id="guests"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select>
       </div>
+      <button class="book" type="button" id="topBook">Book</button>
     </div>
     <p class="stay-note" id="stayNote"></p>
   </div>
@@ -386,9 +377,9 @@ footer ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:6px}
   <section class="wrap hero">
     <div class="hero-grid">
       <div>
-        <h1 aria-label="Mediterraneo Hostel">
-          <span aria-hidden="true"><span class="r">M</span><span class="w">e</span><span class="b">d</span><span class="r">i</span><span class="w">t</span><span class="b">e</span><span class="r">r</span><span class="w">r</span><span class="b">a</span><span class="r">n</span><span class="w">e</span><span class="b">o</span></span><br>
-          <span aria-hidden="true"><span class="r">H</span><span class="w">o</span><span class="b">s</span><span class="r">t</span><span class="w">e</span><span class="b">l</span></span>
+        <h1>
+          <span class="r">Mediterraneo</span><br>
+          <span class="box">Hostel</span>
         </h1>
         <div class="hero-say">
           <div class="cta">
@@ -460,7 +451,8 @@ footer ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:6px}
       <h2>What is around the door</h2>
       <p>Twelve places, closest first — tap one to open it and find it on the map.
         Distances are straight-line from the front door; walking time counts 80 metres a minute,
-        and the centre of Asunción is flat.</p>
+        and the centre of Asunción is flat. A <b>~</b> means we counted the blocks rather than
+        measured the spot, so those four have no pin on the map.</p>
     </div>
     <div class="hood-grid">
       <div class="mapbox">
@@ -651,13 +643,13 @@ const PLACES = [
     where: "Along the Río Paraguay", lat: -25.27600, lon: -57.63600,
     note: "The promenade by the river. Sunset over the Chaco from here." },
 
-  { name: "Smart Fit", kind: "Gym", icon: "gym",
+  { name: "Smart Fit", stima: 350, kind: "Gym", icon: "gym",
     where: "Oliva esq. Nuestra Señora de la Asunción",
     note: "On our own street, a couple of blocks towards the river. Day passes available." },
-  { name: "Vit 360", kind: "Gym", icon: "gym",
+  { name: "Vit 360", stima: 450, kind: "Gym", icon: "gym",
     where: "Haedo c/ 15 de Agosto",
     note: "Smaller neighbourhood gym in La Encarnación." },
-  { name: "Biggie Express", kind: "Supermarket", icon: "market",
+  { name: "Biggie Express", stima: 550, kind: "Supermarket", icon: "market",
     where: "Mcal. Estigarribia, between Independencia Nacional and Yegros",
     note: "Open 24 hours — the one to know when you arrive late." },
   /* Stock sta dentro il Mall: stesso punto, quindi un pallino solo.
@@ -673,7 +665,7 @@ const PLACES = [
     where: "14 de Mayo y Gral. Díaz",
     lat: -25.282938, lon: -57.638188,
     note: "Self-service buffet from 13:00, two floors. Monday to Friday and Sunday, 08:00–16:00; closed Saturday." },
-  { name: "Iglesia San Francisco de Asís", kind: "Church", icon: "church",
+  { name: "Iglesia San Francisco de Asís", stima: 500, kind: "Church", icon: "church",
     where: "Herrera 363, between Caballero and Iturbe",
     note: "Franciscan church, blessed in 1901." }
 ];
@@ -754,7 +746,11 @@ const iconSVG = (name, size, stroke) =>
 
   const pts = conPosto.filter(p => p.lat && p.lon)
     .map((p, i) => ({ ...p, i, m: metres(p) }));
-  const senzaPunto = conPosto.filter(p => !(p.lat && p.lon));
+  /* Chi non ha un punto misurato ma ha una stima porta lo stesso il suo
+     numero, segnato come tale: senza pallino sulla mappa, ma con quanto
+     ci si mette a piedi, che e' la cosa che si guarda. */
+  const senzaPunto = conPosto.filter(p => !(p.lat && p.lon))
+    .map(p => p.stima ? { ...p, m: p.stima, circa: true } : p);
   const segni = {};
 
   /* Il link a Google Maps: sulle coordinate se le abbiamo misurate,
@@ -771,9 +767,10 @@ const iconSVG = (name, size, stroke) =>
         <span class="ico">${iconSVG(p.icon, 18, 2)}</span>
         <span class="kind">${p.kind}</span>
         ${p.m !== undefined
-          ? `<span class="far">${showDist(p.m)} · ${showWalk(p.m)}</span>`
-          : `<a class="far cerca" href="${gmap(p)}" target="_blank" rel="noopener"
-                title="${p.name} in Google Maps">Find it →</a>`}
+          ? `<span class="far${p.circa ? " circa" : ""}"${p.circa
+              ? ' title="Counted in blocks, not measured on the spot"' : ""}>${
+              p.circa ? "~" : ""}${showDist(p.m)} · ${showWalk(p.m)}</span>`
+          : ""}
         <span class="nm">${p.name}</span>
         <svg class="caret" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
              stroke-width="3" stroke-linecap="square" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
@@ -787,8 +784,9 @@ const iconSVG = (name, size, stroke) =>
           </svg>Open in Google Maps</a>
       </div>
     </details>`;
-  list.innerHTML = [...pts].sort((a, c) => a.m - c.m).map(riga).join("")
-                 + senzaPunto.map(riga).join("");
+  list.innerHTML = [...pts, ...senzaPunto]
+    .sort((a, c) => (a.m ?? Infinity) - (c.m ?? Infinity))
+    .map(riga).join("");
 
   /* Una riga senza pallino proprio (Stock) illumina quello che la ospita. */
   const pallino = i => {
@@ -1006,6 +1004,20 @@ document.querySelectorAll("[data-carousel]").forEach(frame => {
   go(0);
 });
 
+document.getElementById("topBook").addEventListener("click", () => {
+  if (!nights()) { chiediLeDate(); return; }
+  document.getElementById("roomList").scrollIntoView({ behavior: "smooth", block: "start" });
+});
+
+/* Porta il cursore sulla casella che manca e fa lampeggiare la riga. */
+function chiediLeDate() {
+  const manca = elIn.value ? elOut : elIn;
+  document.querySelector(".searchbar").scrollIntoView({ block: "center", behavior: "smooth" });
+  manca.focus();
+  elNote.classList.add("chiama");
+  setTimeout(() => elNote.classList.remove("chiama"), 1400);
+}
+
 function refresh() {
   const nt = nights();
   const g = Number(elGuests.value);
@@ -1054,14 +1066,7 @@ const sentMsg = document.getElementById("sentMsg");
 let current = null;
 
 function openBooking(room) {
-  if (!nights()) {
-    const manca = elIn.value ? elOut : elIn;
-    document.querySelector(".searchbar").scrollIntoView({ block: "center", behavior: "smooth" });
-    manca.focus();
-    elNote.classList.add("chiama");
-    setTimeout(() => elNote.classList.remove("chiama"), 1400);
-    return;
-  }
+  if (!nights()) { chiediLeDate(); return; }
   current = room;
   const nt = nights();
   const g = Number(elGuests.value);
