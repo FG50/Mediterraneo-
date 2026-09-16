@@ -215,8 +215,20 @@ input,select,textarea,button{font:inherit;color:inherit}
   display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;
   border-bottom:2px solid var(--ink);padding-block:26px 8px;
 }
-.rooms-head h2{font-size:clamp(24px,4vw,40px);display:flex;align-items:center;gap:10px}
-.rooms-head h2 svg{width:56px;height:39px;flex:none;image-rendering:pixelated}
+.rooms-head h2{font-size:clamp(24px,4vw,40px);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.capy{height:34px;width:auto;flex:none;image-rendering:pixelated;display:block}
+.capy-fam{display:inline-flex;align-items:flex-end;gap:5px}
+.capy-fam .cucciolo{display:block}
+.capy-fam .cucciolo .capy{height:17px}
+.capy-set{display:inline-flex;align-items:flex-end;gap:8px}
+.capy-set .capy{height:30px}
+/* Nella doppia sono due, e il secondo si gira verso il primo. */
+.capy-set .capy + .capy{transform:scaleX(-1)}
+@media (max-width:420px){
+  .capy-fam .capy{height:24px}
+  .capy-fam .cucciolo .capy{height:12px}
+  .capy-set .capy{height:24px}
+}
 .rooms-head p{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase}
 .rooms{scroll-margin-top:137px;padding-block:0 40px;display:flex;flex-direction:column;counter-reset:room}
 .room{
@@ -229,6 +241,7 @@ input,select,textarea,button{font:inherit;color:inherit}
   color:var(--red);line-height:.8;
 }
 .room-head{grid-column:2;display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.room-head h2{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .room-head h2{font-size:clamp(20px,2.4vw,28px)}
 .beds-code{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;border:2px solid var(--ink);padding:4px 9px;font-variant-numeric:tabular-nums}
 .frame{
@@ -467,20 +480,7 @@ footer ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:6px}
   </section>
 
   <div class="wrap rooms-head">
-    <h2>Six rooms<svg viewBox="0 0 20 14" shape-rendering="crispEdges" aria-hidden="true">
-        <rect x="0" y="6" width="1" height="2" fill="#4A3018"></rect>
-        <rect x="4" y="0" width="4" height="3" fill="#4A3018"></rect><rect x="5" y="1" width="2" height="1" fill="#8A5A34"></rect>
-        <rect x="12" y="0" width="4" height="3" fill="#4A3018"></rect><rect x="13" y="1" width="2" height="1" fill="#8A5A34"></rect>
-        <rect x="1" y="2" width="18" height="9" fill="#4A3018"></rect>
-        <rect x="2" y="3" width="16" height="7" fill="#8A5A34"></rect>
-        <rect x="3" y="7" width="14" height="2" fill="#C79B6A"></rect>
-        <rect x="14" y="5" width="1" height="1" fill="#1F1410"></rect>
-        <rect x="17" y="6" width="2" height="2" fill="#4A3018"></rect>
-        <rect x="3" y="11" width="2" height="3" fill="#4A3018"></rect>
-        <rect x="7" y="11" width="2" height="3" fill="#4A3018"></rect>
-        <rect x="11" y="11" width="2" height="3" fill="#4A3018"></rect>
-        <rect x="15" y="11" width="2" height="3" fill="#4A3018"></rect>
-        </svg></h2>
+    <h2>Six rooms<span class="capy-fam" id="capyFam"></span></h2>
     <p>Prices are per night, taxes in. Nothing is charged when you send a request.</p>
   </div>
 
@@ -682,6 +682,46 @@ const PLACES = [
    cui l'abbiamo letto, non alle sue notti, e a chi legge sembrerebbe una
    risposta alla sua domanda. Qui si prenota chiedendo: la conferma arriva
    con la risposta, e quella e' vera per qualunque data. */
+
+/* ============================================================
+   i capibara
+
+   Un disegno solo, sullo stesso reticolo di pixel di quelli che
+   stanno in fondo alla pagina: cambia la maglietta, non la bestia.
+   Cosi' la famiglia sembra una famiglia.
+   ============================================================ */
+const capibara = (maglia, fiore) => `
+  <svg class="capy" viewBox="0 0 ${fiore ? 24 : 20} 14" shape-rendering="crispEdges" aria-hidden="true">
+    <rect x="0" y="6" width="1" height="2" fill="#4A3018"></rect>
+    <rect x="4" y="0" width="4" height="3" fill="#4A3018"></rect><rect x="5" y="1" width="2" height="1" fill="#8A5A34"></rect>
+    <rect x="12" y="0" width="4" height="3" fill="#4A3018"></rect><rect x="13" y="1" width="2" height="1" fill="#8A5A34"></rect>
+    <rect x="1" y="2" width="18" height="9" fill="#4A3018"></rect>
+    <rect x="2" y="3" width="16" height="7" fill="#8A5A34"></rect>
+    <rect x="3" y="7" width="14" height="2" fill="#C79B6A"></rect>
+    ${maglia ? `<rect x="3" y="4" width="10" height="6" fill="${maglia[0]}"></rect>
+      <rect x="3" y="4" width="10" height="1" fill="${maglia[1]}"></rect>
+      <rect x="3" y="9" width="10" height="1" fill="${maglia[1]}"></rect>` : ""}
+    <rect x="14" y="5" width="1" height="1" fill="#1F1410"></rect>
+    <rect x="17" y="6" width="2" height="2" fill="#4A3018"></rect>
+    <rect x="3" y="11" width="2" height="3" fill="#4A3018"></rect>
+    <rect x="7" y="11" width="2" height="3" fill="#4A3018"></rect>
+    <rect x="11" y="11" width="2" height="3" fill="#4A3018"></rect>
+    <rect x="15" y="11" width="2" height="3" fill="#4A3018"></rect>
+    ${fiore ? `<rect x="21" y="10" width="1" height="4" fill="#2F6B34"></rect>
+      <rect x="20" y="11" width="1" height="1" fill="#4C9A4C"></rect>
+      <rect x="20" y="7" width="3" height="3" fill="#F0C43A"></rect>
+      <rect x="21" y="8" width="1" height="1" fill="#C41B1B"></rect>` : ""}
+  </svg>`;
+
+const MAGLIA_BLU  = ["#1447A6", "#0F3268"];
+const MAGLIA_ROSA = ["#E39CAE", "#C77A8E"];
+
+/* Chi sta a fianco a quale camera. */
+const CAPIBARA_CAMERA = {
+  male:    capibara(MAGLIA_BLU),
+  female:  capibara(MAGLIA_ROSA, true),
+  ensuite: capibara() + capibara(),
+};
 
 const ROOMS = [
   { id:"mixed", name:"Mixed Dormitory", codes:"Beds G1–G8", unit:"bed", beds:8, free:8, price:70000,
@@ -932,7 +972,7 @@ function slideHTML(p, i, room) {
 list.innerHTML = ROOMS.map(r => `
   <article class="room" id="${r.id}">
     <div class="room-head">
-      <h2>${r.name}</h2>
+      <h2>${r.name}${CAPIBARA_CAMERA[r.id] ? `<span class="capy-set">${CAPIBARA_CAMERA[r.id]}</span>` : ""}</h2>
       <span class="beds-code">${r.codes}</span>
     </div>
     <div class="frame" data-carousel="${r.id}" tabindex="0" role="group"
@@ -1003,6 +1043,10 @@ document.querySelectorAll("[data-carousel]").forEach(frame => {
   }, { passive: true });
   go(0);
 });
+
+/* Uno grande e cinque piccoli, a fianco di "Six rooms". */
+document.getElementById("capyFam").innerHTML =
+  capibara() + Array.from({ length: 5 }, () => `<span class="cucciolo">${capibara()}</span>`).join("");
 
 document.getElementById("topBook").addEventListener("click", () => {
   if (!nights()) { chiediLeDate(); return; }
