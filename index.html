@@ -101,9 +101,10 @@ input,select,textarea,button{font:inherit;color:inherit}
 .hero h1{font-size:clamp(30px,6.2vw,80px);letter-spacing:-.01em;line-height:1.15}
 .hero h1 .r{color:var(--red)}
 .hero h1 .box{
-  display:inline-block;background:var(--bg);color:var(--ink);padding:2px 10px;margin-block:6px;
+  display:inline-block;background:#FFFFFF;color:var(--ink);padding:2px 10px;margin-block:6px;
   transform:rotate(-1.4deg);box-shadow:0 0 0 3px var(--ink) inset;
 }
+.hero h1 .bl{color:var(--blue)}
 .hero-say{margin-top:22px;border-top:2px solid var(--ink);padding-top:16px}
 .cta{display:flex;gap:8px;flex-wrap:wrap;align-self:end}
 .cta a{
@@ -240,7 +241,7 @@ input,select,textarea,button{font:inherit;color:inherit}
 .capy.girato{transform:scaleX(-1)}
 .capy-set .finestra{height:32px}
 .capy-set .water{height:30px}
-.dorme{display:inline-flex;align-items:flex-end;vertical-align:bottom;margin-left:18px}
+.dorme{display:inline-flex;align-items:flex-end;vertical-align:bottom;margin-left:18px;gap:16px}
 .dorme .capy{height:clamp(62px,9.6vw,118px)}
 @media (max-width:420px){
   .capy-fam .capy{height:24px}
@@ -446,7 +447,7 @@ footer ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:6px}
       <div>
         <h1>
           <span class="r">Mediterraneo</span><br>
-          <span class="box">Hostel</span><span class="dorme" id="capyDorme"></span>
+          <span class="box"><span class="bl">Hostel</span></span><span class="dorme" id="capyDorme"></span>
         </h1>
         <div class="hero-say">
           <div class="cta">
@@ -811,6 +812,22 @@ const finestra = () => `
 /* Lo stesso capibara di sopra, sceso di otto pixel per far posto ai
    sonni: l'occhio e' una riga invece di un puntino, e al naso gli
    cresce la bolla. */
+/* L'asta con la bandiera. Tre bande come sul pennone del Palacio in
+   apertura — stessi rossi e blu — piu' il puntino d'oro dello stemma,
+   che e' quello che la distingue da quella olandese. */
+const bandiera = () => `
+  <svg class="capy asta" viewBox="0 0 16 26" shape-rendering="crispEdges"
+       role="img" aria-label="The flag of Paraguay">
+    <rect x="2" y="0" width="1" height="1" fill="#F0C43A"></rect>
+    <rect x="2" y="1" width="1" height="24" fill="#4A3018"></rect>
+    <rect x="0" y="24" width="5" height="2" fill="#4A3018"></rect>
+    <rect x="3" y="2" width="12" height="11" fill="#12213E"></rect>
+    <rect x="4" y="3" width="10" height="3" fill="#D52B1E"></rect>
+    <rect x="4" y="6" width="10" height="3" fill="#FFFFFF"></rect>
+    <rect x="4" y="9" width="10" height="3" fill="#0038A8"></rect>
+    <rect x="8" y="7" width="1" height="1" fill="#F0C43A"></rect>
+  </svg>`;
+
 const capibaraDorme = () => `
   <svg class="capy dorme-capy" viewBox="0 0 36 26" shape-rendering="crispEdges"
        role="img" aria-label="A capybara asleep">
@@ -1179,7 +1196,7 @@ document.querySelectorAll("[data-carousel]").forEach(frame => {
   go(0);
 });
 
-document.getElementById("capyDorme").innerHTML = capibaraDorme();
+document.getElementById("capyDorme").innerHTML = capibaraDorme() + bandiera();
 
 /* Uno grande e cinque piccoli, a fianco di "Six rooms". */
 document.getElementById("capyFam").innerHTML =
