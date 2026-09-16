@@ -75,24 +75,15 @@ input,select,textarea,button{font:inherit;color:inherit}
 .marq .b{color:var(--blue)}
 @media (prefers-reduced-motion:reduce){ .marq{animation:none} }
 
-/* ---------- le date ---------- */
-.searchbar{position:sticky;top:0;z-index:30;background:var(--bg);border-bottom:3px solid var(--ink)}
-.search-in{display:flex;align-items:flex-end;flex-wrap:wrap;gap:12px;padding-block:14px}
-.search-fields{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}
-#topBook{align-self:flex-end}
-.field{display:flex;flex-direction:column;gap:5px;min-width:140px}
-.field label{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase}
-.field input,.field select{
-  border:2px solid var(--ink);background:var(--bg);padding:8px 10px;
-  font-size:13.5px;min-height:42px;width:100%;font-variant-numeric:tabular-nums;
+/* ---------- le date, dentro la finestra della richiesta ---------- */
+.quando{display:grid;grid-template-columns:1fr 1fr auto;gap:10px}
+.quando .f{min-width:0}
+.quando input,.quando select{
+  border:2px solid var(--ink);background:var(--bg);padding:9px 10px;
+  font-size:13px;width:100%;font-variant-numeric:tabular-nums;
 }
-.field input::-webkit-calendar-picker-indicator{filter:grayscale(1);cursor:pointer}
-.stay-note{font-size:12.5px;width:100%;padding-top:2px}
-.stay-note b{font-variant-numeric:tabular-nums}
-.stay-note .ask{color:var(--muted)}
-@keyframes chiama{0%,100%{background:transparent}30%{background:var(--yellow)}}
-.stay-note.chiama{animation:chiama 1.4s ease}
-@media (prefers-reduced-motion:reduce){ .stay-note.chiama{animation:none;background:var(--yellow)} }
+.quando input::-webkit-calendar-picker-indicator{filter:grayscale(1);cursor:pointer}
+@media (max-width:430px){ .quando{grid-template-columns:1fr 1fr} .quando .f:last-child{grid-column:1/-1} }
 
 /* ---------- l'apertura ---------- */
 .hero{padding-block:30px 26px;border-bottom:3px solid var(--ink)}
@@ -148,7 +139,7 @@ input,select,textarea,button{font:inherit;color:inherit}
 .direct strong{font-weight:700}
 
 /* ---------- il quartiere ---------- */
-.hood{padding-block:30px;border-bottom:3px solid var(--ink);scroll-margin-top:137px}
+.hood{padding-block:30px;border-bottom:3px solid var(--ink);scroll-margin-top:18px}
 .hood-head{margin-bottom:18px;max-width:64ch}
 .hood-head h2{font-size:clamp(24px,4vw,40px)}
 .hood-head p{font-size:12.5px;color:var(--muted);margin-top:10px}
@@ -243,16 +234,17 @@ input,select,textarea,button{font:inherit;color:inherit}
 .capy-set .water{height:30px}
 .dorme{display:inline-flex;align-items:flex-end;vertical-align:bottom;margin-left:18px;gap:16px}
 .dorme .capy{height:clamp(62px,9.6vw,118px)}
+.dorme .asta{height:clamp(84px,13vw,158px)}
 @media (max-width:420px){
   .capy-fam .capy{height:24px}
   .capy-fam .cucciolo .capy{height:12px}
   .capy-set .capy{height:24px}
 }
 .rooms-head p{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase}
-.rooms{scroll-margin-top:137px;padding-block:0 40px;display:flex;flex-direction:column;counter-reset:room}
+.rooms{scroll-margin-top:18px;padding-block:0 40px;display:flex;flex-direction:column;counter-reset:room}
 .room{
   display:grid;grid-template-columns:4.4ch minmax(0,1fr);gap:14px 20px;align-items:start;
-  border-bottom:2px solid var(--ink);padding-block:26px;scroll-margin-top:137px;
+  border-bottom:2px solid var(--ink);padding-block:26px;scroll-margin-top:18px;
 }
 .room::before{
   content:counter(room,decimal-leading-zero);counter-increment:room;
@@ -317,8 +309,6 @@ input,select,textarea,button{font:inherit;color:inherit}
 }
 .price .amount .cur{font-size:.62em;margin-right:.1em}
 .price .unit{font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin-top:6px}
-.price .total{font-size:11.5px;color:var(--muted);margin-top:3px}
-.price .total b{color:var(--ink);font-variant-numeric:tabular-nums}
 .book{
   border:2px solid var(--ink);cursor:pointer;padding:13px 26px;background:var(--yellow);color:var(--ink);
   font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;
@@ -346,7 +336,8 @@ dialog::backdrop{background:rgba(18,33,62,.55)}
 .srow{display:flex;justify-content:space-between;gap:16px;font-size:12.5px}
 .srow span{color:var(--muted)}
 .srow b{font-variant-numeric:tabular-nums}
-.srow.tot{border-top:2px solid var(--ink);padding-top:9px;font-size:14px}
+.srow.tot{border-top:2px solid var(--ink);padding-top:9px;font-size:14px;align-items:baseline}
+.srow.tot b:empty{display:none}
 .srow.tot span{color:var(--ink)}
 .f{display:flex;flex-direction:column;gap:6px}
 .f label{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase}
@@ -375,14 +366,8 @@ footer ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:6px}
 .setup{border-top:2px solid var(--ink);padding-block:16px 32px;font-size:11.5px;color:var(--muted)}
 .setup code{background:var(--bg);border:2px solid var(--ink);padding:1px 5px;font-size:11px;font-family:inherit;color:var(--ink)}
 
-@media (max-width:1179px){
-  .searchbar{position:static}
-  .room,.hood{scroll-margin-top:16px}
 }
 
-@media (max-width:760px){
-  .room,.hood{scroll-margin-top:16px}
-}
 /* Su un telefono piccolo la finestra della richiesta va stretta: se no
    fra intestazione e riepilogo per i campi resta una fessura. */
 @media (max-width:430px), (max-height:700px){
@@ -400,16 +385,6 @@ footer ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:6px}
   .btn-ghost,.d-foot .book{padding:10px 13px;font-size:11px}
 }
 
-@media (max-width:560px){
-  /* Quattro righe di modulo prima di vedere la casa erano troppe:
-     due campi per riga, e il tasto di fianco agli ospiti. */
-  .search-in{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px;align-items:end}
-  .search-fields{display:contents}
-  .field{min-width:0}
-  .field input,.field select{font-size:12.5px;padding:8px}
-  #topBook{width:100%;padding-inline:0}
-  .stay-note{grid-column:1/-1}
-}
 @media (max-width:640px){
   .room{grid-template-columns:1fr}
   .room::before{grid-column:1}
@@ -427,20 +402,6 @@ footer ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:6px}
 <div class="tick" aria-hidden="true">
   <div class="marq"><b class="r">★ Book direct — no commission</b><b class="w">★ Six rooms in the old town</b><b class="b">★ Reception open 24 hours</b><b class="r">★ Everything on foot</b><b class="w">★ Taxes in, nothing at the desk</b><b class="b">★ We answer the same day</b><b class="r">★ Book direct — no commission</b><b class="w">★ Six rooms in the old town</b><b class="b">★ Reception open 24 hours</b><b class="r">★ Everything on foot</b><b class="w">★ Taxes in, nothing at the desk</b><b class="b">★ We answer the same day</b></div>
 </div>
-<div class="searchbar">
-  <div class="wrap search-in">
-    <div class="search-fields">
-      <div class="field"><label for="checkin">Check-in</label><input type="date" id="checkin"></div>
-      <div class="field"><label for="checkout">Check-out</label><input type="date" id="checkout"></div>
-      <div class="field"><label for="guests">Guests</label>
-        <select id="guests"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select>
-      </div>
-      <button class="book" type="button" id="topBook">Book</button>
-    </div>
-    <p class="stay-note" id="stayNote"></p>
-  </div>
-</div>
-
 <main id="top">
   <section class="wrap hero">
     <div class="hero-grid">
@@ -451,7 +412,7 @@ footer ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:6px}
         </h1>
         <div class="hero-say">
           <div class="cta">
-            <a class="go" href="#mixed">See rooms →</a>
+            <a class="go" href="#mixed">See rooms and book →</a>
             <a class="plainbtn" href="#hood">Find us →</a>
           </div>
         </div>
@@ -469,47 +430,105 @@ footer ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:6px}
       </div>
       <div class="card-art" aria-hidden="true">
         <svg viewBox="0 0 48 64" shape-rendering="crispEdges">
-      <rect x="0" y="0" width="48" height="32" fill="#8FD3F4"></rect>
-      <rect x="4" y="5" width="6" height="2" fill="#FFFFFF"></rect><rect x="6" y="4" width="4" height="2" fill="#FFFFFF"></rect>
-      <rect x="34" y="8" width="7" height="2" fill="#FFFFFF"></rect><rect x="36" y="7" width="4" height="2" fill="#FFFFFF"></rect>
-      <rect x="3" y="30" width="6" height="6" fill="#F2B9C6"></rect><rect x="3" y="29" width="6" height="1" fill="#D98CA0"></rect>
-      <rect x="39" y="30" width="6" height="6" fill="#F2B9C6"></rect><rect x="39" y="29" width="6" height="1" fill="#D98CA0"></rect>
-      <rect x="5" y="32" width="2" height="2" fill="#5B3540"></rect><rect x="41" y="32" width="2" height="2" fill="#5B3540"></rect>
-      <rect x="3" y="36" width="42" height="16" fill="#F2B9C6"></rect>
-      <rect x="3" y="35" width="42" height="1" fill="#D98CA0"></rect>
-      <rect x="3" y="46" width="42" height="6" fill="#E39CAE"></rect>
-      <rect x="4" y="46" width="1" height="6" fill="#FBEFF1"></rect><rect x="7" y="46" width="1" height="6" fill="#FBEFF1"></rect>
-      <rect x="10" y="46" width="1" height="6" fill="#FBEFF1"></rect><rect x="13" y="46" width="1" height="6" fill="#FBEFF1"></rect>
-      <rect x="16" y="46" width="1" height="6" fill="#FBEFF1"></rect><rect x="31" y="46" width="1" height="6" fill="#FBEFF1"></rect>
-      <rect x="34" y="46" width="1" height="6" fill="#FBEFF1"></rect><rect x="37" y="46" width="1" height="6" fill="#FBEFF1"></rect>
-      <rect x="40" y="46" width="1" height="6" fill="#FBEFF1"></rect><rect x="43" y="46" width="1" height="6" fill="#FBEFF1"></rect>
-      <rect x="5" y="39" width="2" height="3" fill="#5B3540"></rect><rect x="9" y="39" width="2" height="3" fill="#5B3540"></rect>
-      <rect x="13" y="39" width="2" height="3" fill="#5B3540"></rect><rect x="29" y="39" width="2" height="3" fill="#5B3540"></rect>
-      <rect x="33" y="39" width="2" height="3" fill="#5B3540"></rect><rect x="37" y="39" width="2" height="3" fill="#5B3540"></rect>
-      <rect x="41" y="39" width="2" height="3" fill="#5B3540"></rect>
-      <rect x="20" y="18" width="8" height="18" fill="#F2B9C6"></rect>
-      <rect x="20" y="18" width="1" height="18" fill="#FBEFF1"></rect><rect x="27" y="18" width="1" height="18" fill="#FBEFF1"></rect>
-      <rect x="22" y="24" width="1" height="2" fill="#5B3540"></rect><rect x="25" y="24" width="1" height="2" fill="#5B3540"></rect>
-      <rect x="22" y="29" width="1" height="2" fill="#5B3540"></rect><rect x="25" y="29" width="1" height="2" fill="#5B3540"></rect>
-      <rect x="19" y="15" width="10" height="1" fill="#D98CA0"></rect>
-      <rect x="20" y="14" width="8" height="1" fill="#D98CA0"></rect>
-      <rect x="21" y="13" width="6" height="1" fill="#B5748A"></rect>
-      <rect x="22" y="12" width="4" height="1" fill="#B5748A"></rect>
-      <rect x="23" y="11" width="2" height="1" fill="#8C5468"></rect>
-      <rect x="23" y="4" width="1" height="7" fill="#3A2A2E"></rect>
-      <rect x="24" y="4" width="6" height="1" fill="#D52B1E"></rect>
-      <rect x="24" y="5" width="6" height="1" fill="#FFFFFF"></rect>
-      <rect x="24" y="6" width="6" height="1" fill="#0038A8"></rect>
-      <rect x="16" y="50" width="16" height="2" fill="#EDE6D6"></rect>
-      <rect x="18" y="52" width="12" height="2" fill="#DCD2BC"></rect>
-      <rect x="0" y="52" width="48" height="12" fill="#4C9A4C"></rect>
-      <rect x="0" y="52" width="48" height="1" fill="#468C46"></rect>
-      <rect x="0" y="58" width="48" height="1" fill="#468C46"></rect>
-      <rect x="2" y="48" width="6" height="4" fill="#2F6B34"></rect>
-      <rect x="40" y="48" width="6" height="4" fill="#2F6B34"></rect>
-      <rect x="21" y="50" width="4" height="3" fill="#2F6B34"></rect>
-      </svg>
-        <span class="cap">Palacio de los López</span>
+    <rect x="0" y="0" width="48" height="17" fill="#8FD3F4"></rect>
+    <rect x="5" y="3" width="6" height="2" fill="#FFFFFF"></rect>
+    <rect x="7" y="2" width="3" height="1" fill="#FFFFFF"></rect>
+    <rect x="33" y="6" width="7" height="2" fill="#FFFFFF"></rect>
+    <rect x="35" y="5" width="4" height="1" fill="#FFFFFF"></rect>
+    <rect x="0" y="6" width="16" height="1" fill="#2A2A2A"></rect>
+    <rect x="16" y="7" width="16" height="1" fill="#2A2A2A"></rect>
+    <rect x="32" y="8" width="16" height="1" fill="#2A2A2A"></rect>
+    <rect x="0" y="9" width="1" height="39" fill="#8C96A8"></rect>
+    <rect x="47" y="15" width="1" height="33" fill="#E8E6E0"></rect>
+    <rect x="2" y="15" width="44" height="3" fill="#E2E9F2"></rect>
+    <rect x="4" y="16" width="1" height="2" fill="#16203B"></rect>
+    <rect x="7" y="16" width="1" height="2" fill="#16203B"></rect>
+    <rect x="10" y="16" width="1" height="2" fill="#16203B"></rect>
+    <rect x="13" y="16" width="1" height="2" fill="#16203B"></rect>
+    <rect x="16" y="16" width="1" height="2" fill="#16203B"></rect>
+    <rect x="19" y="16" width="1" height="2" fill="#16203B"></rect>
+    <rect x="22" y="16" width="1" height="2" fill="#16203B"></rect>
+    <rect x="25" y="16" width="1" height="2" fill="#16203B"></rect>
+    <rect x="28" y="16" width="1" height="2" fill="#16203B"></rect>
+    <rect x="31" y="16" width="1" height="2" fill="#16203B"></rect>
+    <rect x="34" y="16" width="1" height="2" fill="#16203B"></rect>
+    <rect x="37" y="16" width="1" height="2" fill="#16203B"></rect>
+    <rect x="40" y="16" width="1" height="2" fill="#16203B"></rect>
+    <rect x="43" y="16" width="1" height="2" fill="#16203B"></rect>
+    <rect x="1" y="18" width="46" height="1" fill="#E2E9F2"></rect>
+    <rect x="1" y="19" width="46" height="1" fill="#BFCBDC"></rect>
+    <rect x="2" y="19" width="1" height="1" fill="#E2E9F2"></rect>
+    <rect x="4" y="19" width="1" height="1" fill="#E2E9F2"></rect>
+    <rect x="6" y="19" width="1" height="1" fill="#E2E9F2"></rect>
+    <rect x="8" y="19" width="1" height="1" fill="#E2E9F2"></rect>
+    <rect x="10" y="19" width="1" height="1" fill="#E2E9F2"></rect>
+    <rect x="12" y="19" width="1" height="1" fill="#E2E9F2"></rect>
+    <rect x="14" y="19" width="1" height="1" fill="#E2E9F2"></rect>
+    <rect x="16" y="19" width="1" height="1" fill="#E2E9F2"></rect>
+    <rect x="18" y="19" width="1" height="1" fill="#E2E9F2"></rect>
+    <rect x="20" y="19" width="1" height="1" fill="#E2E9F2"></rect>
+    <rect x="22" y="19" width="1" height="1" fill="#E2E9F2"></rect>
+    <rect x="24" y="19" width="1" height="1" fill="#E2E9F2"></rect>
+    <rect x="26" y="19" width="1" height="1" fill="#E2E9F2"></rect>
+    <rect x="28" y="19" width="1" height="1" fill="#E2E9F2"></rect>
+    <rect x="30" y="19" width="1" height="1" fill="#E2E9F2"></rect>
+    <rect x="32" y="19" width="1" height="1" fill="#E2E9F2"></rect>
+    <rect x="34" y="19" width="1" height="1" fill="#E2E9F2"></rect>
+    <rect x="36" y="19" width="1" height="1" fill="#E2E9F2"></rect>
+    <rect x="38" y="19" width="1" height="1" fill="#E2E9F2"></rect>
+    <rect x="40" y="19" width="1" height="1" fill="#E2E9F2"></rect>
+    <rect x="42" y="19" width="1" height="1" fill="#E2E9F2"></rect>
+    <rect x="44" y="19" width="1" height="1" fill="#E2E9F2"></rect>
+    <rect x="1" y="20" width="46" height="2" fill="#E2E9F2"></rect>
+    <rect x="1" y="22" width="46" height="26" fill="#EBC77C"></rect>
+    <rect x="1" y="22" width="2" height="26" fill="#E2E9F2"></rect>
+    <rect x="45" y="22" width="2" height="26" fill="#E2E9F2"></rect>
+    <rect x="6" y="23" width="10" height="2" fill="#E2E9F2"></rect>
+    <rect x="7" y="22" width="8" height="1" fill="#E2E9F2"></rect>
+    <rect x="7" y="25" width="8" height="14" fill="#E2E9F2"></rect>
+    <rect x="8" y="26" width="6" height="12" fill="#5E4126"></rect>
+    <rect x="9" y="26" width="1" height="12" fill="#7E5731"></rect>
+    <rect x="11" y="26" width="1" height="12" fill="#7E5731"></rect>
+    <rect x="8" y="26" width="6" height="1" fill="#16203B"></rect>
+    <rect x="6" y="39" width="10" height="4" fill="#E2E9F2"></rect>
+    <rect x="8" y="40" width="6" height="2" fill="#BFCBDC"></rect>
+    <rect x="10" y="40" width="2" height="2" fill="#E2E9F2"></rect>
+    <rect x="32" y="23" width="10" height="2" fill="#E2E9F2"></rect>
+    <rect x="33" y="22" width="8" height="1" fill="#E2E9F2"></rect>
+    <rect x="33" y="25" width="8" height="14" fill="#E2E9F2"></rect>
+    <rect x="34" y="26" width="6" height="12" fill="#5E4126"></rect>
+    <rect x="35" y="26" width="1" height="12" fill="#7E5731"></rect>
+    <rect x="37" y="26" width="1" height="12" fill="#7E5731"></rect>
+    <rect x="34" y="26" width="6" height="1" fill="#16203B"></rect>
+    <rect x="32" y="39" width="10" height="4" fill="#E2E9F2"></rect>
+    <rect x="34" y="40" width="6" height="2" fill="#BFCBDC"></rect>
+    <rect x="36" y="40" width="2" height="2" fill="#E2E9F2"></rect>
+    <rect x="19" y="22" width="10" height="26" fill="#E2E9F2"></rect>
+    <rect x="19" y="22" width="10" height="1" fill="#BFCBDC"></rect>
+    <rect x="22" y="21" width="4" height="1" fill="#E2E9F2"></rect>
+    <rect x="23" y="22" width="2" height="1" fill="#BFCBDC"></rect>
+    <rect x="23" y="25" width="2" height="1" fill="#16203B"></rect>
+    <rect x="22" y="26" width="4" height="1" fill="#16203B"></rect>
+    <rect x="21" y="27" width="6" height="1" fill="#16203B"></rect>
+    <rect x="21" y="28" width="6" height="20" fill="#16203B"></rect>
+    <rect x="23" y="28" width="1" height="2" fill="#42558C"></rect>
+    <rect x="22" y="31" width="1" height="15" fill="#2A3A66"></rect>
+    <rect x="25" y="31" width="1" height="15" fill="#2A3A66"></rect>
+    <rect x="20" y="32" width="1" height="2" fill="#F0C43A"></rect>
+    <rect x="27" y="36" width="1" height="2" fill="#1447A6"></rect>
+    <rect x="1" y="48" width="46" height="4" fill="#AEBCCE"></rect>
+    <rect x="1" y="48" width="46" height="1" fill="#E2E9F2"></rect>
+    <rect x="9" y="49" width="1" height="3" fill="#93A3B8"></rect>
+    <rect x="18" y="49" width="1" height="3" fill="#93A3B8"></rect>
+    <rect x="27" y="49" width="1" height="3" fill="#93A3B8"></rect>
+    <rect x="36" y="49" width="1" height="3" fill="#93A3B8"></rect>
+    <rect x="0" y="52" width="48" height="6" fill="#C9C4BA"></rect>
+    <rect x="0" y="52" width="48" height="1" fill="#ADA89E"></rect>
+    <rect x="0" y="58" width="48" height="6" fill="#948F87"></rect>
+    <rect x="13" y="59" width="1" height="5" fill="#E0DCD5"></rect>
+    <rect x="35" y="59" width="1" height="5" fill="#E0DCD5"></rect>
+        </svg>
+        <span class="cap">Nuestra Señora de la Asunción 865</span>
       </div>
     </div>
   </section>
@@ -619,6 +638,14 @@ footer ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:6px}
       <p>We answer by message, usually the same day. Nothing is charged now.</p>
     </div>
     <div class="d-body">
+      <div class="quando">
+        <div class="f"><label for="checkin">Check-in</label>
+          <input type="date" id="checkin" name="checkin" required></div>
+        <div class="f"><label for="checkout">Check-out</label>
+          <input type="date" id="checkout" name="checkout" required></div>
+        <div class="f"><label for="guests">Guests</label>
+          <select id="guests" name="guests"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+      </div>
       <div class="summary" id="dlgSummary"></div>
       <div class="f"><label for="gName">Your name</label>
         <input id="gName" name="gName" type="text" autocomplete="name" required placeholder="First and last name"></div>
@@ -816,16 +843,16 @@ const finestra = () => `
    apertura — stessi rossi e blu — piu' il puntino d'oro dello stemma,
    che e' quello che la distingue da quella olandese. */
 const bandiera = () => `
-  <svg class="capy asta" viewBox="0 0 16 26" shape-rendering="crispEdges"
+  <svg class="capy asta" viewBox="0 0 20 26" shape-rendering="crispEdges"
        role="img" aria-label="The flag of Paraguay">
     <rect x="2" y="0" width="1" height="1" fill="#F0C43A"></rect>
     <rect x="2" y="1" width="1" height="24" fill="#4A3018"></rect>
     <rect x="0" y="24" width="5" height="2" fill="#4A3018"></rect>
-    <rect x="3" y="2" width="12" height="11" fill="#12213E"></rect>
-    <rect x="4" y="3" width="10" height="3" fill="#D52B1E"></rect>
-    <rect x="4" y="6" width="10" height="3" fill="#FFFFFF"></rect>
-    <rect x="4" y="9" width="10" height="3" fill="#0038A8"></rect>
-    <rect x="8" y="7" width="1" height="1" fill="#F0C43A"></rect>
+    <rect x="3" y="2" width="16" height="14" fill="#12213E"></rect>
+    <rect x="4" y="3" width="14" height="4" fill="#D52B1E"></rect>
+    <rect x="4" y="7" width="14" height="4" fill="#FFFFFF"></rect>
+    <rect x="4" y="11" width="14" height="4" fill="#0038A8"></rect>
+    <rect x="10" y="8" width="1" height="1" fill="#F0C43A"></rect>
   </svg>`;
 
 const capibaraDorme = () => `
@@ -1088,16 +1115,19 @@ const iconSVG = (name, size, stroke) =>
 /* ============================================================
    dates
    ============================================================ */
-const elIn = document.getElementById("checkin");
-const elOut = document.getElementById("checkout");
-const elGuests = document.getElementById("guests");
-const elNote = document.getElementById("stayNote");
-
-(function seedDates() {
+/* I tre campi stanno dentro la finestra della richiesta, e quella dopo
+   un invio riuscito viene riscritta: quindi si ripescano ogni volta che
+   il corpo torna al suo posto, se no restano appesi a nodi staccati. */
+let elIn, elOut, elGuests;
+function prendiCampi() {
+  elIn = document.getElementById("checkin");
+  elOut = document.getElementById("checkout");
+  elGuests = document.getElementById("guests");
   const t = new Date();
   const oggi = iso(new Date(Date.UTC(t.getFullYear(), t.getMonth(), t.getDate())));
   elIn.min = oggi; elOut.min = oggi;
-})();
+}
+prendiCampi();
 
 function nights() {
   const a = Date.parse(elIn.value), b = Date.parse(elOut.value);
@@ -1155,7 +1185,6 @@ list.innerHTML = ROOMS.map(r => `
         <div class="price">
           <div class="amount"><span class="cur">₲</span>${r.price.toLocaleString("en-US")}</div>
           <div class="unit">per ${r.unit} · per night</div>
-          <div class="total" data-total="${r.id}"></div>
         </div>
         <button class="book" type="button" data-book="${r.id}">Book</button>
       </div>
@@ -1202,39 +1231,12 @@ document.getElementById("capyDorme").innerHTML = capibaraDorme() + bandiera();
 document.getElementById("capyFam").innerHTML =
   capibara() + Array.from({ length: 5 }, () => `<span class="cucciolo">${capibara()}</span>`).join("");
 
-document.getElementById("topBook").addEventListener("click", () => {
-  if (!nights()) { chiediLeDate(); return; }
-  document.getElementById("roomList").scrollIntoView({ behavior: "smooth", block: "start" });
-});
-
-/* Porta il cursore sulla casella che manca e fa lampeggiare la riga. */
-function chiediLeDate() {
-  const manca = elIn.value ? elOut : elIn;
-  document.querySelector(".searchbar").scrollIntoView({ block: "center", behavior: "smooth" });
-  manca.focus();
-  elNote.classList.add("chiama");
-  setTimeout(() => elNote.classList.remove("chiama"), 1400);
-}
-
+/* Sulle schede delle camere resta il prezzo a notte: il totale lo fa
+   la finestra della richiesta, che e' dove si scelgono le date. */
 function refresh() {
-  const nt = nights();
-  const g = Number(elGuests.value);
-  elNote.innerHTML = nt
-    ? `<b>${nt}</b> night${nt > 1 ? "s" : ""} · ${pretty(elIn.value)} → ${pretty(elOut.value)} · <b>${g}</b> guest${g > 1 ? "s" : ""}`
-    : !elIn.value ? "Pick your dates and we work out the total."
-    : "Pick a check-out date after your check-in.";
-  if (nt) elNote.innerHTML += ' · <span class="ask">we reply with the room, usually the same day</span>';
-
   ROOMS.forEach(r => {
-    const tot = document.querySelector(`[data-total="${r.id}"]`);
     const txt = document.querySelector(`[data-avail="${r.id}"] [data-avail-text]`);
     const btn = document.querySelector(`[data-book="${r.id}"]`);
-    if (nt) {
-      const per = r.unit === "bed" ? Math.min(g, r.beds) : 1;
-      tot.innerHTML = `<b>${gs(r.price * nt * per)}</b> total${
-        r.unit === "bed" && per > 1 ? ` · ${per} beds` : ""} · ${nt} night${nt > 1 ? "s" : ""}`;
-    } else { tot.textContent = ""; }
-
     if (r.free === 0) {
       txt.textContent = "Closed for now";
       btn.disabled = true; btn.textContent = "Closed";
@@ -1244,14 +1246,6 @@ function refresh() {
     }
   });
 }
-[elIn, elOut, elGuests].forEach(el => el.addEventListener("change", () => {
-  if (elIn.value && elOut.value && Date.parse(elOut.value) <= Date.parse(elIn.value)) {
-    const a = new Date(elIn.value + "T00:00:00Z");
-    a.setUTCDate(a.getUTCDate() + 1);
-    elOut.value = iso(a);
-  }
-  refresh();
-}));
 refresh();
 
 /* ============================================================
@@ -1268,10 +1262,14 @@ let current = null;
    no la seconda richiesta non trova piu' i suoi campi. */
 const dlgCorpo = document.querySelector(".d-body").innerHTML;
 dlg.addEventListener("close", () => {
-  const corpo = document.querySelector(".d-body");
-  if (corpo.innerHTML !== dlgCorpo) {
+  if (dlg.dataset.grazie) {
+    const corpo = document.querySelector(".d-body");
+    const date = { i: elIn.value, o: elOut.value, g: elGuests.value };
     corpo.innerHTML = dlgCorpo;
     dlgSummary = document.getElementById("dlgSummary");
+    prendiCampi();
+    elIn.value = date.i; elOut.value = date.o; elGuests.value = date.g;
+    delete dlg.dataset.grazie;
   }
   const invia = document.getElementById("sendReq");
   invia.textContent = "Send request";
@@ -1283,22 +1281,45 @@ dlg.addEventListener("close", () => {
 });
 
 function openBooking(room) {
-  if (!nights()) { chiediLeDate(); return; }
   current = room;
-  const nt = nights();
-  const g = Number(elGuests.value);
-  const per = room.unit === "bed" ? Math.min(g, room.beds) : 1;
   dlgTitle.textContent = room.unit === "bed" ? "Request a bed" : "Request this room";
-  dlgSummary.innerHTML = `
-    <div class="srow"><span>Room</span><b>${room.name}</b></div>
-    <div class="srow"><span>Dates</span><b>${pretty(elIn.value)} → ${pretty(elOut.value)}</b></div>
-    <div class="srow"><span>Nights</span><b>${nt}</b></div>
-    <div class="srow"><span>Guests</span><b>${g}</b></div>
-    <div class="srow tot"><span>${gs(room.price)} × ${nt} night${nt > 1 ? "s" : ""}${
-      per > 1 ? ` × ${per} beds` : ""} · taxes in</span><b>${gs(room.price * nt * per)}</b></div>`;
+  disegnaRiepilogo();
   sentMsg.hidden = true;
   dlg.showModal();
 }
+
+/* Il riepilogo si rifa' a ogni cambio di data o di ospiti. Finche' le
+   date non ci sono dice cosa manca invece di mostrare zero notti. */
+function disegnaRiepilogo() {
+  if (!current || !dlgSummary.isConnected) return;
+  const nt = nights();
+  const g = Number(elGuests.value);
+  const per = current.unit === "bed" ? Math.min(g, current.beds) : 1;
+  const conto = nt
+    ? `<div class="srow"><span>Dates</span><b>${pretty(elIn.value)} → ${pretty(elOut.value)}</b></div>
+       <div class="srow"><span>Nights</span><b>${nt}</b></div>
+       <div class="srow tot"><span>${gs(current.price)} × ${nt} night${nt > 1 ? "s" : ""}${
+         per > 1 ? ` × ${per} beds` : ""} · taxes in</span><b>${gs(current.price * nt * per)}</b></div>`
+    : `<div class="srow"><span>Per ${current.unit} · per night</span><b>${gs(current.price)}</b></div>
+       <div class="srow tot"><span>${elIn.value
+         ? "Pick a check-out after your check-in"
+         : "Pick your dates above and we work out the total"}</span><b></b></div>`;
+  dlgSummary.innerHTML =
+    `<div class="srow"><span>Room</span><b>${current.name}</b></div>
+     <div class="srow"><span>Guests</span><b>${g}</b></div>` + conto;
+}
+
+/* I campi vengono riscritti insieme al corpo della finestra, quindi si
+   ascolta la finestra e non i campi. */
+dlg.addEventListener("change", e => {
+  if (!e.target.matches("#checkin, #checkout, #guests")) return;
+  if (elIn.value && elOut.value && Date.parse(elOut.value) <= Date.parse(elIn.value)) {
+    const a = new Date(elIn.value + "T00:00:00Z");
+    a.setUTCDate(a.getUTCDate() + 1);
+    elOut.value = iso(a);
+  }
+  disegnaRiepilogo();
+});
 
 function requestText() {
   const nt = nights();
@@ -1373,6 +1394,7 @@ document.getElementById("sendReq").addEventListener("click", async () => {
   };
 
   function ringrazia() {
+    dlg.dataset.grazie = "1";
     document.querySelector(".d-body").innerHTML =
       `<div class="summary"><b>Thank you, ${riga.guestName.split(" ")[0] || "and see you soon"}.</b>
        <span>Your request is with us. We answer by message, usually the same day —
