@@ -222,8 +222,9 @@ input,select,textarea,button{font:inherit;color:inherit}
 .capy-fam .cucciolo .capy{height:17px}
 .capy-set{display:inline-flex;align-items:flex-end;gap:8px}
 .capy-set .capy{height:30px}
-/* Nella doppia sono due, e il secondo si gira verso il primo. */
-.capy-set .capy + .capy{transform:scaleX(-1)}
+/* In due si guardano; in tre restano in fila. */
+.capy-set .capy:nth-child(2):last-child{transform:scaleX(-1)}
+.capy-set .finestra{height:32px}
 @media (max-width:420px){
   .capy-fam .capy{height:24px}
   .capy-fam .cucciolo .capy{height:12px}
@@ -713,13 +714,39 @@ const capibara = (maglia, fiore) => `
       <rect x="21" y="8" width="1" height="1" fill="#C41B1B"></rect>` : ""}
   </svg>`;
 
+/* La finestra della camera sul giardino: stesso reticolo dei capibara,
+   stessi colori — la cornice e il davanzale sono il marrone della loro
+   pelliccia, i fiori sono quelli che tiene in mano la femmina. */
+const finestra = () => `
+  <svg class="capy finestra" viewBox="0 0 16 14" shape-rendering="crispEdges" aria-hidden="true">
+    <rect x="0" y="0" width="16" height="12" fill="#4A3018"></rect>
+    <rect x="2" y="2" width="12" height="8" fill="#8FD3F4"></rect>
+    <rect x="2" y="8" width="12" height="2" fill="#4C9A4C"></rect>
+    <rect x="2" y="8" width="12" height="1" fill="#468C46"></rect>
+    <rect x="4" y="7" width="1" height="1" fill="#2F6B34"></rect>
+    <rect x="3" y="6" width="3" height="1" fill="#F0C43A"></rect>
+    <rect x="4" y="5" width="1" height="1" fill="#F0C43A"></rect>
+    <rect x="4" y="6" width="1" height="1" fill="#C41B1B"></rect>
+    <rect x="10" y="7" width="1" height="1" fill="#2F6B34"></rect>
+    <rect x="9" y="6" width="3" height="1" fill="#E39CAE"></rect>
+    <rect x="10" y="5" width="1" height="1" fill="#E39CAE"></rect>
+    <rect x="10" y="6" width="1" height="1" fill="#C41B1B"></rect>
+    <rect x="12" y="7" width="1" height="2" fill="#2F6B34"></rect>
+    <rect x="12" y="6" width="1" height="1" fill="#F0C43A"></rect>
+    <rect x="7" y="2" width="1" height="8" fill="#4A3018"></rect>
+    <rect x="0" y="12" width="16" height="2" fill="#8A5A34"></rect>
+    <rect x="0" y="12" width="16" height="1" fill="#C79B6A"></rect>
+  </svg>`;
+
 const MAGLIA_BLU  = ["#1447A6", "#0F3268"];
 const MAGLIA_ROSA = ["#E39CAE", "#C77A8E"];
 
 /* Chi sta a fianco a quale camera. */
 const CAPIBARA_CAMERA = {
-  male:    capibara(MAGLIA_BLU),
   female:  capibara(MAGLIA_ROSA, true),
+  male:    capibara(MAGLIA_BLU),
+  triple:  capibara() + capibara() + capibara(),
+  twin:    finestra(),
   ensuite: capibara() + capibara(),
 };
 
