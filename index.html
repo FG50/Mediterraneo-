@@ -680,7 +680,6 @@ footer ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:6px}
     </div>
     <div class="d-foot">
       <button class="book" type="button" id="sendReq">Send request</button>
-      <button class="btn-ghost" type="button" id="copyReq">Copy request</button>
       <button class="btn-ghost" type="button" id="closeDlg">Cancel</button>
       <span class="sent" id="sentMsg" hidden></span>
     </div>
@@ -1290,7 +1289,6 @@ dlg.addEventListener("close", () => {
   invia.textContent = "Send request";
   invia.disabled = false;
   invia.onclick = null;
-  document.getElementById("copyReq").hidden = false;
   document.getElementById("closeDlg").hidden = false;
   sentMsg.hidden = true;
 });
@@ -1360,13 +1358,6 @@ document.getElementById("roomList").addEventListener("click", e => {
   openBooking(ROOMS.find(r => r.id === b.dataset.book));
 });
 document.getElementById("closeDlg").addEventListener("click", () => dlg.close());
-document.getElementById("copyReq").addEventListener("click", async () => {
-  try { await navigator.clipboard.writeText(requestText());
-    sentMsg.textContent = "Copied"; }
-  catch { sentMsg.textContent = "Select the text above and copy it"; }
-  sentMsg.style.color = "var(--blue)";
-  sentMsg.hidden = false;
-});
 
 /* ============================================================
    Il registro delle richieste.
@@ -1418,7 +1409,6 @@ document.getElementById("sendReq").addEventListener("click", async () => {
     btn.textContent = "Close";
     btn.disabled = false;
     btn.onclick = () => dlg.close();
-    document.getElementById("copyReq").hidden = true;
     document.getElementById("closeDlg").hidden = true;
   }
 
