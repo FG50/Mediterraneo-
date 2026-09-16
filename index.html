@@ -222,9 +222,12 @@ input,select,textarea,button{font:inherit;color:inherit}
 .capy-fam .cucciolo .capy{height:17px}
 .capy-set{display:inline-flex;align-items:flex-end;gap:8px}
 .capy-set .capy{height:30px}
-/* In due si guardano; in tre restano in fila. */
-.capy-set .capy:nth-child(2):last-child{transform:scaleX(-1)}
+/* Nella doppia il secondo si gira verso il primo. */
+.capy.girato{transform:scaleX(-1)}
 .capy-set .finestra{height:32px}
+.capy-set .water{height:30px}
+.dorme{display:inline-flex;align-items:flex-end;vertical-align:bottom;margin-left:18px}
+.dorme .capy{height:clamp(62px,9.6vw,118px)}
 @media (max-width:420px){
   .capy-fam .capy{height:24px}
   .capy-fam .cucciolo .capy{height:12px}
@@ -393,7 +396,7 @@ footer ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:6px}
       <div>
         <h1>
           <span class="r">Mediterraneo</span><br>
-          <span class="box">Hostel</span>
+          <span class="box">Hostel</span><span class="dorme" id="capyDorme"></span>
         </h1>
         <div class="hero-say">
           <div class="cta">
@@ -691,8 +694,8 @@ const PLACES = [
    stanno in fondo alla pagina: cambia la maglietta, non la bestia.
    Cosi' la famiglia sembra una famiglia.
    ============================================================ */
-const capibara = (maglia, fiore) => `
-  <svg class="capy" viewBox="0 0 ${fiore ? 24 : 20} 14" shape-rendering="crispEdges" aria-hidden="true">
+const capibara = (maglia, fiore, girato) => `
+  <svg class="capy${girato ? " girato" : ""}" viewBox="0 0 ${fiore ? 24 : 20} 14" shape-rendering="crispEdges" aria-hidden="true">
     <rect x="0" y="6" width="1" height="2" fill="#4A3018"></rect>
     <rect x="4" y="0" width="4" height="3" fill="#4A3018"></rect><rect x="5" y="1" width="2" height="1" fill="#8A5A34"></rect>
     <rect x="12" y="0" width="4" height="3" fill="#4A3018"></rect><rect x="13" y="1" width="2" height="1" fill="#8A5A34"></rect>
@@ -717,6 +720,23 @@ const capibara = (maglia, fiore) => `
 /* La finestra della camera sul giardino: stesso reticolo dei capibara,
    stessi colori — la cornice e il davanzale sono il marrone della loro
    pelliccia, i fiori sono quelli che tiene in mano la femmina. */
+/* Il water della camera col bagno: la porcellana e' l'unico colore
+   nuovo, l'acqua e' lo stesso azzurro del cielo nella finestra. */
+const water = () => `
+  <svg class="capy water" viewBox="0 0 15 14" shape-rendering="crispEdges" aria-hidden="true">
+    <rect x="3" y="0" width="9" height="5" fill="#4A3018"></rect>
+    <rect x="4" y="1" width="7" height="3" fill="#F2EFE6"></rect>
+    <rect x="6" y="2" width="3" height="1" fill="#4A3018"></rect>
+    <rect x="6" y="5" width="3" height="1" fill="#4A3018"></rect>
+    <rect x="2" y="6" width="11" height="4" fill="#4A3018"></rect>
+    <rect x="3" y="7" width="9" height="2" fill="#F2EFE6"></rect>
+    <rect x="4" y="7" width="7" height="2" fill="#8FD3F4"></rect>
+    <rect x="3" y="10" width="9" height="2" fill="#4A3018"></rect>
+    <rect x="4" y="10" width="7" height="1" fill="#F2EFE6"></rect>
+    <rect x="5" y="12" width="5" height="2" fill="#4A3018"></rect>
+    <rect x="6" y="12" width="3" height="1" fill="#D8D2C4"></rect>
+  </svg>`;
+
 const finestra = () => `
   <svg class="capy finestra" viewBox="0 0 16 14" shape-rendering="crispEdges" aria-hidden="true">
     <rect x="0" y="0" width="16" height="12" fill="#4A3018"></rect>
@@ -738,6 +758,46 @@ const finestra = () => `
     <rect x="0" y="12" width="16" height="1" fill="#C79B6A"></rect>
   </svg>`;
 
+/* Lo stesso capibara di sopra, sceso di otto pixel per far posto ai
+   sonni: l'occhio e' una riga invece di un puntino, e al naso gli
+   cresce la bolla. */
+const capibaraDorme = () => `
+  <svg class="capy dorme-capy" viewBox="0 0 36 22" shape-rendering="crispEdges"
+       role="img" aria-label="A capybara asleep">
+    <rect x="0" y="14" width="1" height="2" fill="#4A3018"></rect>
+    <rect x="4" y="8" width="4" height="3" fill="#4A3018"></rect>
+    <rect x="5" y="9" width="2" height="1" fill="#8A5A34"></rect>
+    <rect x="12" y="8" width="4" height="3" fill="#4A3018"></rect>
+    <rect x="13" y="9" width="2" height="1" fill="#8A5A34"></rect>
+    <rect x="1" y="10" width="18" height="9" fill="#4A3018"></rect>
+    <rect x="2" y="11" width="16" height="7" fill="#8A5A34"></rect>
+    <rect x="3" y="15" width="14" height="2" fill="#C79B6A"></rect>
+    <rect x="13" y="13" width="3" height="1" fill="#1F1410"></rect>
+    <rect x="17" y="14" width="2" height="2" fill="#4A3018"></rect>
+    <rect x="3" y="19" width="2" height="3" fill="#4A3018"></rect>
+    <rect x="7" y="19" width="2" height="3" fill="#4A3018"></rect>
+    <rect x="11" y="19" width="2" height="3" fill="#4A3018"></rect>
+    <rect x="15" y="19" width="2" height="3" fill="#4A3018"></rect>
+    <rect x="19" y="13" width="4" height="4" fill="#4A3018"></rect>
+    <rect x="20" y="14" width="2" height="2" fill="#EAF1F8"></rect>
+    <rect x="20" y="14" width="1" height="1" fill="#FFFFFF"></rect>
+    <rect x="19" y="6" width="6" height="1" fill="#12213E"></rect>
+    <rect x="23" y="7" width="1" height="1" fill="#12213E"></rect>
+    <rect x="22" y="8" width="1" height="1" fill="#12213E"></rect>
+    <rect x="21" y="9" width="1" height="1" fill="#12213E"></rect>
+    <rect x="20" y="10" width="1" height="1" fill="#12213E"></rect>
+    <rect x="19" y="11" width="6" height="1" fill="#12213E"></rect>
+    <rect x="26" y="3" width="5" height="1" fill="#12213E"></rect>
+    <rect x="29" y="4" width="1" height="1" fill="#12213E"></rect>
+    <rect x="28" y="5" width="1" height="1" fill="#12213E"></rect>
+    <rect x="27" y="6" width="1" height="1" fill="#12213E"></rect>
+    <rect x="26" y="7" width="5" height="1" fill="#12213E"></rect>
+    <rect x="32" y="0" width="4" height="1" fill="#12213E"></rect>
+    <rect x="34" y="1" width="1" height="1" fill="#12213E"></rect>
+    <rect x="33" y="2" width="1" height="1" fill="#12213E"></rect>
+    <rect x="32" y="3" width="4" height="1" fill="#12213E"></rect>
+  </svg>`;
+
 const MAGLIA_BLU  = ["#1447A6", "#0F3268"];
 const MAGLIA_ROSA = ["#E39CAE", "#C77A8E"];
 
@@ -747,7 +807,7 @@ const CAPIBARA_CAMERA = {
   male:    capibara(MAGLIA_BLU),
   triple:  capibara() + capibara() + capibara(),
   twin:    finestra(),
-  ensuite: capibara() + capibara(),
+  ensuite: capibara() + capibara(null, false, true) + water(),
 };
 
 const ROOMS = [
@@ -1070,6 +1130,8 @@ document.querySelectorAll("[data-carousel]").forEach(frame => {
   }, { passive: true });
   go(0);
 });
+
+document.getElementById("capyDorme").innerHTML = capibaraDorme();
 
 /* Uno grande e cinque piccoli, a fianco di "Six rooms". */
 document.getElementById("capyFam").innerHTML =
