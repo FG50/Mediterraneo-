@@ -144,7 +144,6 @@ input,select,textarea,button{font:inherit;color:inherit}
 .hood{padding-block:30px;border-bottom:3px solid var(--ink);scroll-margin-top:18px}
 .hood-head{margin-bottom:18px;max-width:64ch}
 .hood-head h2{font-size:clamp(24px,4vw,40px)}
-.hood-head p{font-size:12.5px;color:var(--muted);margin-top:10px}
 .hood-grid{display:grid;gap:22px;grid-template-columns:minmax(0,1.2fr) minmax(280px,.95fr);align-items:start}
 @media (max-width:880px){ .hood-grid{grid-template-columns:1fr} }
 .mapbox{position:relative;border:3px solid var(--ink);box-shadow:var(--sh-m);aspect-ratio:4/3;background:var(--slot)}
@@ -211,6 +210,7 @@ input,select,textarea,button{font:inherit;color:inherit}
 @media (prefers-reduced-motion:reduce){ .poi .caret{transition:none} }
 .poi-body{padding:0 10px 11px 52px;display:flex;flex-direction:column;align-items:flex-start;gap:9px}
 .poi .note{font-size:11.5px;color:var(--muted)}
+.poi .stima{font-size:10.5px;color:var(--muted);border-left:3px solid var(--ink);padding-left:8px}
 .poi .gmap{
   font-size:10px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;
   display:inline-flex;align-items:center;gap:5px;text-decoration:none;
@@ -361,12 +361,10 @@ footer{border-top:3px solid var(--ink);background:var(--card)}
 .capys svg:nth-child(2){width:58px;height:41px;transform:scaleX(-1)}
 .capys svg:nth-child(3){width:44px;height:31px}
 @media (max-width:560px){ .capys svg:nth-child(3){display:none} }
-.foot-in{padding-block:22px 40px;display:grid;gap:28px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.foot-in{padding-block:22px 64px;display:grid;gap:28px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
 footer h3{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;margin-bottom:10px}
 footer p,footer li{font-size:12.5px;color:var(--muted)}
 footer ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:6px}
-.setup{border-top:2px solid var(--ink);padding-block:16px 32px;font-size:11.5px;color:var(--muted)}
-.setup code{background:var(--bg);border:2px solid var(--ink);padding:1px 5px;font-size:11px;font-family:inherit;color:var(--ink)}
 
 }
 
@@ -544,10 +542,6 @@ footer ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:6px}
   <section class="wrap hood" id="hood">
     <div class="hood-head">
       <h2>What is around the door</h2>
-      <p>Twelve places, closest first — tap one to open it and find it on the map.
-        Distances are straight-line from the front door; walking time counts 80 metres a minute,
-        and the centre of Asunción is flat. A <b>~</b> means we counted the blocks rather than
-        measured the spot, so those four have no pin on the map.</p>
     </div>
     <div class="hood-grid">
       <div class="mapbox">
@@ -636,7 +630,6 @@ footer ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:6px}
         we confirm the room first, and you pay on arrival.</p>
     </div>
   </div>
-  <div class="wrap setup" id="setupNote"></div>
 </footer>
 
 <dialog id="bookDlg">
@@ -1004,6 +997,7 @@ const iconSVG = (name, size, stroke) =>
       </summary>
       <div class="poi-body">
         <p class="note">${p.where ? `<b>${p.where}.</b> ` : ""}${p.note}</p>
+        ${p.circa ? `<p class="stima">Counted in blocks, not measured — so this one has no pin on the map.</p>` : ""}
         <a class="gmap" href="${gmap(p)}" target="_blank" rel="noopener">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -1454,25 +1448,15 @@ document.getElementById("sendReq").addEventListener("click", async () => {
   }
 });
 
-/* ---------- la riga di servizio in fondo alla pagina ---------- */
+/* ---------- cosa manca prima di darla agli ospiti ----------
+   Non sta piu' scritto in pagina: la trova chi apre la console, e
+   l'elenco per esteso sta nel README. */
 (function nota() {
   const manca = [];
-  if (!BOOKINGS_ENDPOINT) manca.push("l'indirizzo del registro (<code>BOOKINGS_ENDPOINT</code>)");
-  if (!CONTACT.whatsapp && !CONTACT.email) manca.push("i contatti (<code>CONTACT</code>)");
+  if (!BOOKINGS_ENDPOINT) manca.push("l'indirizzo del registro (BOOKINGS_ENDPOINT)");
+  if (!CONTACT.whatsapp && !CONTACT.email) manca.push("i contatti (CONTACT)");
   if (ROOMS.some(r => r.photos.some(f => !f.src))) manca.push("le foto delle camere");
-
-  const testa = "";
-  if (!manca.length) {
-    document.getElementById("setupNote").innerHTML =
-      testa + "Booking requests go straight into our register.";
-    return;
-  }
-  const elenco = manca.length === 1 ? manca[0]
-               : manca.slice(0, -1).join(", ") + " e " + manca[manca.length - 1];
-  document.getElementById("setupNote").innerHTML =
-    testa + `<b>Prima che questa pagina vada online</b>, manca ancora: ${elenco}. `
-    + (BOOKINGS_ENDPOINT ? "" :
-       "Finche' manca il registro, il tasto Prenota apre WhatsApp con la richiesta gia' scritta.");
+  if (manca.length) console.info("Prima che questa pagina vada online, manca ancora: " + manca.join(", ") + ".");
 })();
 </script>
 </body>
