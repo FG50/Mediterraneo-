@@ -24,8 +24,12 @@ function disponibilidad(generato) {
 let falle = 0;
 const cheque = (cond, msg) => { console.log((cond ? 'ok   - ' : 'MALE - ') + msg); if (!cond) falle++; };
 
-async function apri(browser, { config, disp, postRisposta, ora, zona }) {
+async function apri(browser, { config, disp, postRisposta, ora, zona, ritardoMappa }) {
   const ctx = await browser.newContext(zona ? { timezoneId: zona } : {});
+  if (ritardoMappa) await ctx.addInitScript(ms => {   // «L» (Leaflet) si vede solo dopo ms millisecondi
+    const t0 = Date.now(); let vera;
+    Object.defineProperty(window, 'L', { configurable: true, get() { return Date.now() - t0 > ms ? vera : undefined; }, set(v) { vera = v; } });
+  }, ritardoMappa);
   if (ora) await ctx.addInitScript(t => {            // l'orologio del browser fermo a quell'ora
     const Vera = Date, f = Vera.parse(t);
     window.Date = class extends Vera { constructor(...a) { a.length ? super(...a) : super(f); } static now() { return f; } };
@@ -95,6 +99,15 @@ async function apri(browser, { config, disp, postRisposta, ora, zona }) {
     await page.click('[data-book="mixed"]');
     cheque((await page.inputValue('#medi-checkin')) === oggi && (await page.inputValue('#medi-checkout')) === domani && (await page.getAttribute('#medi-checkin', 'min')) === oggi,
       `check-in ${oggi}, check-out ${domani}, minimo ${oggi} (${perche})`);
+    await ctx.close();
+  }
+
+  // 1b) la libreria della mappa arriva in ritardo (1,5 s): la mappa deve comunque comparire
+  {
+    const { page, visti, ctx } = await apri(browser, { config: null, ritardoMappa: 1500 });
+    await page.waitForTimeout(3500);
+    cheque((await page.locator('#medi-map .leaflet-tile-pane').count()) === 1 && !(await page.locator('#medi-map').innerText()).includes('not loading'), 'mappa: con la libreria in ritardo compare lo stesso');
+    cheque((await page.locator('#medi-poi-list .medi-poi').count()) > 5, 'mappa: l\'elenco dei posti c\'e\'');
     await ctx.close();
   }
 
