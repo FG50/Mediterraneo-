@@ -6,18 +6,22 @@
 const fs = require("fs"), vm = require("vm"), assert = require("assert");
 const codice = fs.readFileSync(__dirname + "/Codice.gs", "utf8");
 
+// Un oggetto che accetta qualsiasi metodo (formati, colori, larghezze...) e si lascia concatenare.
+const muto = (propri) => new Proxy(propri, { get: (t, k) => (k in t ? t[k] : () => muto(propri)) });
+
 function nuovoMondo(proprieta) {
   const fogli = {};
   const foglioFinto = () => {
-    const celle = {};
+    const celle = {}, formule = {};
     const ws = {
-      righe: [], celle,
+      righe: [], celle, formule, nascosto: false,
       getLastRow() { return ws.righe.length; },
+      getMaxRows() { return 1000; },
       appendRow(r) { ws.righe.push(r); },
+      hideSheet() { ws.nascosto = true; },
       getRange(a, b, c, d) {
         const chiave = typeof a === "string" ? a : `${a},${b}`;
-        return {
-          setFontWeight() {},
+        return muto({
           setValues(v) {
             celle[chiave] = v;
             // «A2:B2» scrive anche le celle una per una, come il foglio vero
@@ -25,19 +29,21 @@ function nuovoMondo(proprieta) {
             if (m) v.forEach((riga, i) => riga.forEach((x, j) => {
               celle[String.fromCharCode(m[1].charCodeAt(0) + j) + (Number(m[2]) + i)] = [[x]];
             }));
+            return this;
           },
+          setValue(x) { celle[chiave] = [[x]]; return this; },
+          setFormulas(f) { formule[chiave] = f; return this; },
           getValue() { const v = celle[chiave]; return v ? v[0][0] : ""; }
-        };
-      },
-      setFrozenRows() {}
+        });
+      }
     };
-    return ws;
+    return muto(ws);
   };
   const ctx = {
     SpreadsheetApp: { getActiveSpreadsheet: () => ({
       getSheetByName: n => fogli[n] || null,
       insertSheet: n => (fogli[n] = foglioFinto())
-    }) },
+    }), newConditionalFormatRule: () => muto({ build: () => ({}) }) },
     ContentService: { MimeType: { JSON: "json" }, createTextOutput: t => ({ testo: t, setMimeType() { return this; } }) },
     LockService: { getScriptLock: () => ({ waitLock() {}, releaseLock() {} }) },
     PropertiesService: { getScriptProperties: () => ({ getProperty: k => proprieta[k] }) },
@@ -80,6 +86,22 @@ prova("una richiesta valida diventa una riga, nell'ordine delle colonne", () => 
   assert.strictEqual(riga[testa.indexOf("nights")], 1);
   assert.strictEqual(riga[testa.indexOf("total")], 140000);
   assert.strictEqual(riga[testa.indexOf("source")], "website");
+  assert.deepStrictEqual(JSON.parse(JSON.stringify(testa.slice(-2))), ["free_every_night", "availability"]);
+  const giorno = t => Math.round((Date.parse(t + "T00:00:00Z") - Date.UTC(1899, 11, 30)) / 86400000);
+  assert.strictEqual(riga[testa.indexOf("checkin")], giorno(domani), "la data e' un numero di giorno: nessun fuso la sposta");
+  assert.strictEqual(riga[testa.indexOf("checkout")], giorno(dopodomani));
+  const [libere, esito] = JSON.parse(JSON.stringify(fogli.Pedidos.formule["2,18"]))[0];
+  assert.match(libere, /^=IFERROR\(MIN\(INDEX\(Disponibilidad!\$C\$5:\$AU\$11,MATCH\(\$E2,Disponibilidad!\$A\$5:\$A\$11,0\),MATCH\(\$J2,/, "usa camera e arrivo della riga 2");
+  assert.match(libere, /MATCH\(\$K2-1,Disponibilidad!\$C\$4:\$AU\$4,0\)/, "fino all'ultima notte, non al giorno di partenza");
+  assert.strictEqual(esito, '=IF($R2="",\"outside the table\",IF($R2>=$I2,"free","not enough"))');
+  assert.ok(fogli.Disponibilidad, "la scheda Disponibilidad c'e' prima delle formule che la nominano");
+});
+
+prova("la seconda richiesta ha le formule sulla sua riga", () => {
+  const { ctx, fogli } = nuovoMondo({});
+  post(ctx, richiesta()); post(ctx, richiesta({ roomId: "female" }));
+  assert.strictEqual(fogli.Pedidos.righe.length, 3);
+  assert.match(JSON.parse(JSON.stringify(fogli.Pedidos.formule["3,18"]))[0][0], /\$E3,.*\$J3,.*\$K3-1/);
 });
 
 prova("un testo che comincia per = + - @ non diventa una formula", () => {
@@ -124,9 +146,12 @@ prova("le camere libere mandate bene si leggono dal GET", () => {
   const letto = get(ctx, { accion: "disponibilidad" });
   assert.strictEqual(letto.ok, true);
   assert.deepStrictEqual(letto.datos, libere());
+  const giorno = t => Math.round((Date.parse(t + "T00:00:00Z") - Date.UTC(1899, 11, 30)) / 86400000);
   const vista = JSON.parse(JSON.stringify(fogli.Disponibilidad.celle["4,1"]));   // fuori dal contesto finto
-  assert.deepStrictEqual(vista[0].slice(0, 3), ["camera", "totale", "2026-11-01"]);
+  assert.deepStrictEqual(vista[0], ["camera", "totale", giorno("2026-11-01"), giorno("2026-11-01") + 1, giorno("2026-11-01") + 2]);
   assert.deepStrictEqual(vista[1], ["mixed", 8, 8, 8, 7]);
+  assert.strictEqual(fogli.Datos.nascosto, true, "i dati per la pagina stanno in una scheda nascosta");
+  assert.match(fogli.Disponibilidad.celle.A2[0][0], /Last update from the hostel spreadsheet: 2026-11-01 09:00 \(Asunción time\)/, "ora di Asunción = UTC meno 3");
 });
 
 prova("le camere libere sbagliate non si salvano", () => {
@@ -137,6 +162,7 @@ prova("le camere libere sbagliate non si salvano", () => {
   const troppe = libere(); troppe.camere.mixed.liberi[1] = 9;       // piu' dei letti che ci sono
   assert.match(manda(troppe).error, /mixed/);
   assert.strictEqual(manda(libere({ desde: "ieri" })).error, "datos");
+  assert.strictEqual(manda(libere({ generato: "non-una-data" })).error, "datos");
   assert.strictEqual(fogli.Disponibilidad, undefined);
 });
 

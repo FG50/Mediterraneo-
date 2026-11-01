@@ -31,12 +31,15 @@ foglio dei conti dell'ostello gli manda (vedi sotto), e le da' al sito.
    *Prenotazioni sito*.
 2. **Estensioni → Apps Script**. Cancella quello che c'e' e incolla tutto
    `apps-script/Codice.gs`. Salva.
-3. **Impostazioni progetto → Proprieta' dello script → Aggiungi**:
+3. Nella barra in alto scegli la funzione **prepara** e premi **Esegui**:
+   Google chiede il permesso la prima volta (e' normale: lo script scrive nel
+   tuo foglio). Crea le schede vuote, cosi' le vedi subito.
+4. **Impostazioni progetto → Proprieta' dello script → Aggiungi**:
    nome `CLAVE`, valore una parola lunga a caso. E' la chiave con cui il
    foglio dei conti aggiorna le camere libere; senza, nessuno puo'.
-4. **Esegui il deployment → Nuovo deployment**, tipo **App web**, con
+5. **Esegui il deployment → Nuovo deployment**, tipo **App web**, con
    *Esegui come*: **Me**, e *Chi ha accesso*: **Chiunque**.
-5. Copia l'indirizzo che ti da (finisce per `/exec`) e mettilo in
+6. Copia l'indirizzo che ti da (finisce per `/exec`) e mettilo in
    `config.json`, accanto a `index.html`:
 
 ```json
@@ -52,17 +55,36 @@ Finche' `endpoint` resta vuoto la pagina e' quella di prima: il tasto
 Prenota non fa finta di niente, copia la richiesta e apre WhatsApp gia'
 scritta. Se il foglio risponde «no», la pagina non dice «Request received».
 
-Nel foglio compaiono due schede, create da sole:
+Nel foglio compaiono tre schede, create da sole:
 
-* **Pedidos** — una riga per richiesta (i campi che manda la pagina).
-* **Disponibilidad** — le camere libere notte per notte, gia' contate.
+* **Pedidos** — una riga per richiesta (i campi che manda la pagina). A destra
+  due colonne che si calcolano da sole: `free_every_night`, i posti che restano
+  liberi in *tutte* le notti chieste, e `availability`: **free** (verde),
+  **not enough** (rosso) o **outside the table** (grigio, date oltre i 45
+  giorni noti).
+* **Disponibilidad** — le camere libere notte per notte, per 45 giorni,
+  colorate (verde tutto libero, giallo qualcuno occupato, rosso pieno), con
+  l'ora dell'ultimo aggiornamento dal foglio dei conti.
+* **Datos** — gli stessi numeri come testo, per la pagina. Nascosta.
 
-### 3. Le foto
+## Far vedere il foglio agli altri
 
-In `ROOMS`, dentro `photos`, ogni foto e' `{ src: "...", alt: "..." }`.
-Finche' `src` manca, al suo posto compare un riquadro con scritto cosa
-dovrebbe esserci. Le immagini si possono mettere in `foto/` e
-richiamare come `foto/camerata-1.jpg`.
+Il foglio Google si apre dal browser come un Excel. Per farlo vedere:
+**Condividi → Chiunque abbia il link → Visualizzatore** (nessuno puo'
+cambiarlo). Chi lo scarica come Excel (**File → Scarica → .xlsx**) ha una
+foto di quel momento, non il foglio vivo.
+
+Per la dimostrazione:
+
+1. Dal sito, scegli una camera e invia una richiesta di prova.
+2. Nel foglio, in *Pedidos*, dopo pochi secondi c'e' la riga. A destra la
+   colonna `availability` dice se quelle notti sono libere.
+3. In *Disponibilidad* si vede la griglia dell'ostello e l'ora
+   dell'ultimo aggiornamento: ogni 30 minuti arriva dall'Excel di gestione.
+
+**Attenzione ai dati veri.** In *Pedidos* ci sono nomi e email degli ospiti.
+Per una dimostrazione usa richieste di prova, e se ci sono prenotazioni vere
+condividi solo con persone indicate per nome, non con il link aperto a tutti.
 
 ## Le camere libere, dall'Excel dell'ostello al sito
 
@@ -77,8 +99,8 @@ Excel dell'ostello  →  (ogni 30 minuti, sola lettura)  →  foglio Google  →
    l'Excel, conta i letti liberi per ogni camera e per ogni notte dei prossimi
    120 giorni (un letto e' occupato se il suo codice, per esempio `G2`, sta
    in UBICACION di una prenotazione), e li manda allo script con la chiave.
-2. Lo script li tiene nella scheda *Disponibilidad* e li da' al sito
-   (`?accion=disponibilidad`).
+2. Lo script li scrive nella scheda *Disponibilidad* (a vista) e in *Datos*
+   (per la pagina), e li da' al sito (`?accion=disponibilidad`).
 3. Il sito mostra su ogni camera «6 of 8 beds free tonight», e nel riquadro
    delle date «3 beds free on every night of your stay» oppure «Not
    available on these dates»; in quel caso il tasto Invia si spegne.

@@ -9,10 +9,14 @@
  * pezzo che scrive e che risponde. Sta dentro il foglio Google. Come si mette
  * in piedi: README.md, "Il foglio delle prenotazioni".
  *
- * Due fogli (schede), creati da soli la prima volta:
+ * Tre schede, create da sole la prima volta (o con la funzione prepara):
  *   Pedidos        una riga per richiesta. I nomi delle colonne sono i campi
- *                  che manda la pagina.
- *   Disponibilidad le camere libere, come le ha contate il foglio dei conti.
+ *                  che manda la pagina; a destra due colonne che si calcolano
+ *                  da sole: quanti posti restano liberi in tutte le notti
+ *                  chieste, e se bastano.
+ *   Disponibilidad le camere libere notte per notte (45 giorni), colorate,
+ *                  con l'ora dell'ultimo aggiornamento dal foglio dei conti.
+ *   Datos          gli stessi numeri come testo per la pagina. Nascosta.
  *
  * Le proprieta' dello script (Impostazioni progetto → Proprieta' dello script):
  *   CLAVE          la parola che deve mandare il foglio dei conti per
@@ -21,6 +25,7 @@
 
 var PEDIDOS = "Pedidos";
 var DISPONIBILIDAD = "Disponibilidad";
+var DATOS = "Datos";
 
 var COLONNE = [
   "receivedAt", "status", "guestName", "guestEmail",
@@ -33,7 +38,9 @@ var COLONNE = [
 var CAMERE = ["mixed", "female", "male", "triple", "twin", "ensuite", "private"];
 var MASSIMO_NOTTI = 60;
 var MASSIMO_GIORNI = 400;
-var GIORNI_LEGGIBILI = 14;       // quanti giorni si scrivono a vista nel foglio
+var GIORNI_GRIGLIA = 45;         // quanti giorni si vedono nella scheda Disponibilidad
+var COLONNE_EXTRA = ["free_every_night", "availability"];   // calcolate dal foglio, non scritte dalla pagina
+var COLORI = { piena: "#FBE9E7", parziale: "#FFF4D6", libera: "#E3F3E8", testa: "#E8EEF9", nd: "#EEEEEE" };
 
 
 // --- il POST: una richiesta, o le camere libere --------------------------
@@ -117,20 +124,98 @@ function foglio(nome) {
   return libro.getSheetByName(nome) || libro.insertSheet(nome);
 }
 
+/** Numero di giorno del foglio (giorni dal 30/12/1899): non dipende dal fuso orario. */
+function seriale(testoData) {
+  return Math.round((Date.parse(testoData + "T00:00:00Z") - Date.UTC(1899, 11, 30)) / 86400000);
+}
+
+/** Lettera della colonna: 1 → A, 27 → AA. */
+function lettera(n) {
+  var s = "";
+  while (n > 0) {
+    s = String.fromCharCode(65 + ((n - 1) % 26)) + s;
+    n = Math.floor((n - 1) / 26);
+  }
+  return s;
+}
+
+/**
+ * Le due formule a destra di ogni richiesta. La prima prende, dalla griglia di
+ * Disponibilidad, il numero piu' basso di posti liberi tra la notte d'arrivo e
+ * l'ultima notte; la seconda lo confronta con quelli chiesti. Se le date non
+ * sono nella griglia, lo dice e non inventa.
+ */
+function formuleControllo(fila) {
+  var c = COLONNE, ultima = lettera(2 + GIORNI_GRIGLIA), fondo = 4 + CAMERE.length;
+  var dati = "Disponibilidad!$C$5:$" + ultima + "$" + fondo;
+  var giorni = "Disponibilidad!$C$4:$" + ultima + "$4";
+  var nomi = "Disponibilidad!$A$5:$A$" + fondo;
+  var col = function (k) { return "$" + lettera(c.indexOf(k) + 1) + fila; };
+  var camera = "MATCH(" + col("roomId") + "," + nomi + ",0)";
+  var libere = '=IFERROR(MIN(INDEX(' + dati + ',' + camera + ',MATCH(' + col("checkin") + ',' + giorni + ',0))' +
+    ':INDEX(' + dati + ',' + camera + ',MATCH(' + col("checkout") + '-1,' + giorni + ',0))),"")';
+  var R = "$" + lettera(c.length + 1) + fila;
+  var esito = '=IF(' + R + '="","outside the table",IF(' + R + '>=' + col("unitsBooked") + ',"free","not enough"))';
+  return [libere, esito];
+}
+
+function regola(area, testo, colore) {
+  return SpreadsheetApp.newConditionalFormatRule()
+    .whenTextEqualTo(testo).setBackground(colore).setRanges([area]).build();
+}
+
+/** La scheda delle richieste, con l'intestazione e i formati la prima volta. */
+function preparaPedidos() {
+  var ws = foglio(PEDIDOS);
+  if (ws.getLastRow() === 0) {
+    var testa = COLONNE.concat(COLONNE_EXTRA);
+    ws.appendRow(testa);
+    ws.getRange(1, 1, 1, testa.length).setFontWeight("bold").setBackground(COLORI.testa);
+    ws.setFrozenRows(1);
+    var giu = ws.getMaxRows() - 1;
+    ws.getRange(2, COLONNE.indexOf("checkin") + 1, giu, 2).setNumberFormat("yyyy-mm-dd");
+    var area = ws.getRange(2, COLONNE.length + 2, giu, 1);
+    ws.setConditionalFormatRules([
+      regola(area, "free", COLORI.libera),
+      regola(area, "not enough", COLORI.piena),
+      regola(area, "outside the table", COLORI.nd)
+    ]);
+  }
+  return ws;
+}
+
+/** La scheda delle camere libere. Esiste prima di tutto: le formule di Pedidos la nominano. */
+function preparaDisponibilidad() {
+  var ws = foglio(DISPONIBILIDAD);
+  if (ws.getRange("A1").getValue() === "") {
+    ws.getRange("A1").setValue("Free beds (or rooms) per night, counted from the hostel's own spreadsheet. Read-only; refreshed every 30 minutes.");
+    ws.getRange("A1").setFontWeight("bold");
+    ws.getRange("A2").setValue("Waiting for the first update…");
+    ws.setFrozenRows(4);
+    ws.setFrozenColumns(2);
+  }
+  return ws;
+}
+
+/** Crea le schede vuote, per vederle prima della prima richiesta. Da lanciare una volta a mano. */
+function prepara() {
+  preparaDisponibilidad();
+  preparaPedidos();
+}
+
 function guardaPedido(dati) {
   var v = validaPedido(dati);
   if (!v.ok) return v;
   var lucchetto = LockService.getScriptLock();
   lucchetto.waitLock(10000);          // due richieste insieme non si pestano
   try {
-    var ws = foglio(PEDIDOS);
-    // La prima volta si scrive l'intestazione, e poi mai piu'.
-    if (ws.getLastRow() === 0) {
-      ws.appendRow(COLONNE);
-      ws.getRange(1, 1, 1, COLONNE.length).setFontWeight("bold");
-      ws.setFrozenRows(1);
-    }
-    ws.appendRow(COLONNE.map(function (k) { return v.riga[k]; }));
+    preparaDisponibilidad();
+    var ws = preparaPedidos();
+    ws.appendRow(COLONNE.map(function (k) {
+      return k === "checkin" || k === "checkout" ? seriale(v.riga[k]) : v.riga[k];
+    }));
+    var fila = ws.getLastRow();
+    ws.getRange(fila, COLONNE.length + 1, 1, COLONNE_EXTRA.length).setFormulas([formuleControllo(fila)]);
   } finally {
     lucchetto.releaseLock();
   }
@@ -142,7 +227,7 @@ function guardaPedido(dati) {
 
 /** Controlla le camere libere mandate dal foglio dei conti. */
 function validaDisponibilidad(datos) {
-  if (!datos || !dataValida(datos.desde) || !datos.camere || !datos.generato) {
+  if (!datos || !dataValida(datos.desde) || !datos.camere || !datos.generato || isNaN(Date.parse(datos.generato))) {
     return { ok: false, error: "datos" };
   }
   for (var i = 0; i < CAMERE.length; i++) {
@@ -166,26 +251,45 @@ function guardaDisponibilidad(dati) {
   if (!v.ok) return v;
 
   var d = dati.datos;
-  var ws = foglio(DISPONIBILIDAD);
-  ws.getRange("A1:B1").setValues([["json", "generato"]]);
-  ws.getRange("A2:B2").setValues([[JSON.stringify(d), d.generato]]);
+  var ws = preparaDisponibilidad();
 
-  // A vista, per chi guarda il foglio: le prime notti, camera per camera.
-  var giorni = Math.min(GIORNI_LEGGIBILI, d.camere[CAMERE[0]].liberi.length);
-  var testa = ["camera", "totale"], fine = new Date(d.desde + "T00:00:00Z");
-  for (var k = 0; k < giorni; k++) {
-    testa.push(new Date(fine.getTime() + k * 86400000).toISOString().substring(0, 10));
-  }
+  // Per la pagina: gli stessi numeri come testo, in una scheda nascosta.
+  var datos = foglio(DATOS);
+  datos.getRange("A1:B1").setValues([["json", "generato"]]);
+  datos.getRange("A2:B2").setValues([[JSON.stringify(d), d.generato]]);
+  try { datos.hideSheet(); } catch (err) { /* se non si puo' nascondere, resta visibile */ }
+
+  // A vista, per chi guarda il foglio: camera per camera, notte per notte, a colori.
+  var giorni = Math.min(GIORNI_GRIGLIA, d.camere[CAMERE[0]].liberi.length);
+  var inizio = seriale(d.desde);
+  var testa = ["camera", "totale"];
+  for (var k = 0; k < giorni; k++) testa.push(inizio + k);
   var righe = [testa].concat(CAMERE.map(function (id) {
     return [id, d.camere[id].totale].concat(d.camere[id].liberi.slice(0, giorni));
   }));
-  ws.getRange(4, 1, righe.length, testa.length).setValues(righe);
+  var colori = righe.map(function (r, i) {
+    return r.map(function (x, j) {
+      if (i === 0 || j < 2) return COLORI.testa;
+      return x === 0 ? COLORI.piena : x < r[1] ? COLORI.parziale : COLORI.libera;
+    });
+  });
+  ws.getRange(4, 1, CAMERE.length + 1, 2 + GIORNI_GRIGLIA).clearContent();
+  var area = ws.getRange(4, 1, righe.length, testa.length);
+  area.setValues(righe);
+  area.setBackgrounds(colori);
+  area.setHorizontalAlignment("center");
   ws.getRange(4, 1, 1, testa.length).setFontWeight("bold");
+  ws.getRange(4, 3, 1, giorni).setNumberFormat("ddd d/m");
+
+  var asuncion = new Date(Date.parse(d.generato) - 3 * 3600000).toISOString().replace("T", " ").substring(0, 16);
+  ws.getRange("A2").setValue("Last update from the hostel spreadsheet: " + asuncion +
+    " (Asunción time).   Green = all free · amber = some taken · red = full.");
   return { ok: true };
 }
 
+/** Le camere libere, come le ha mandate il foglio dei conti (per la pagina). */
 function leggiDisponibilidad() {
-  var ws = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(DISPONIBILIDAD);
+  var ws = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(DATOS);
   var testo = ws ? ws.getRange("A2").getValue() : "";
   if (!testo) return { ok: false, error: "sin datos" };
   return { ok: true, datos: JSON.parse(testo) };
