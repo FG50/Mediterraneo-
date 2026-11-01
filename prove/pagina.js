@@ -24,8 +24,12 @@ function disponibilidad(generato) {
 let falle = 0;
 const cheque = (cond, msg) => { console.log((cond ? 'ok   - ' : 'MALE - ') + msg); if (!cond) falle++; };
 
-async function apri(browser, { config, disp, postRisposta }) {
-  const ctx = await browser.newContext();
+async function apri(browser, { config, disp, postRisposta, ora, zona }) {
+  const ctx = await browser.newContext(zona ? { timezoneId: zona } : {});
+  if (ora) await ctx.addInitScript(t => {            // l'orologio del browser fermo a quell'ora
+    const Vera = Date, f = Vera.parse(t);
+    window.Date = class extends Vera { constructor(...a) { a.length ? super(...a) : super(f); } static now() { return f; } };
+  }, ora);
   const page = await ctx.newPage();
   const visti = { posts: [], richieste: [] };
   await page.route('https://fg50.github.io/Mediterraneo-/config.json', r =>
@@ -52,7 +56,25 @@ async function apri(browser, { config, disp, postRisposta }) {
     await page.waitForTimeout(500);
     cheque(await page.locator('#medi-free-mixed').isHidden(), 'senza config.json nessun cartellino');
     await page.click('[data-book="mixed"]');
+    cheque((await page.inputValue('#medi-checkin')) === giorno(0) && (await page.inputValue('#medi-checkout')) === giorno(1), 'all\'apertura: check-in oggi, check-out domani');
+    cheque((await page.getAttribute('#medi-checkin', 'min')) === giorno(0), 'il minimo del check-in e\' oggi');
+    await page.fill('#medi-checkin', giorno(-3)); await page.dispatchEvent('#medi-checkin', 'change');
+    cheque((await page.inputValue('#medi-checkin')) === giorno(0), 'una data passata scritta a mano torna a oggi');
+    cheque((await page.inputValue('#medi-checkout')) === giorno(1), 'e il check-out resta dopo il check-in');
     cheque(await page.locator('#medi-send-req').isEnabled(), 'senza config.json il tasto Invia resta acceso');
+    await ctx.close();
+  }
+
+  // «oggi» e' quello di Asunción (UTC-3), non quello dell'orologio di chi guarda
+  for (const [ora, zona, oggi, domani, perche] of [
+    ['2026-11-01T20:00:00Z', 'Asia/Tokyo', '2026-11-01', '2026-11-02', 'a Tokyo è già il 2, ad Asunción è ancora il 1'],
+    ['2026-11-02T02:30:00Z', 'Europe/Rome', '2026-11-01', '2026-11-02', '23:30 ad Asunción: ancora il 1'],
+    ['2026-11-02T03:30:00Z', 'America/Los_Angeles', '2026-11-02', '2026-11-03', '00:30 ad Asunción: già il 2'],
+  ]) {
+    const { page, ctx } = await apri(browser, { config: null, ora, zona });
+    await page.click('[data-book="mixed"]');
+    cheque((await page.inputValue('#medi-checkin')) === oggi && (await page.inputValue('#medi-checkout')) === domani && (await page.getAttribute('#medi-checkin', 'min')) === oggi,
+      `check-in ${oggi}, check-out ${domani}, minimo ${oggi} (${perche})`);
     await ctx.close();
   }
 
@@ -66,6 +88,7 @@ async function apri(browser, { config, disp, postRisposta }) {
     cheque(visti.richieste.some(x => x.startsWith('GET https://script.example/exec?accion=disponibilidad')), 'la pagina chiede le camere libere al foglio');
 
     await page.click('[data-book="mixed"]');
+    cheque((await page.inputValue('#medi-checkin')) === giorno(0), 'con il foglio collegato: check-in gia\' oggi all\'apertura');
     await page.fill('#medi-checkin', giorno(1)); await page.fill('#medi-checkout', giorno(4));     // notti 1, 2, 3 → minimo 3 (la notte 2)
     await page.selectOption('#medi-guests', '2');
     await page.dispatchEvent('#medi-checkout', 'change');
@@ -97,6 +120,12 @@ async function apri(browser, { config, disp, postRisposta }) {
     await page.dispatchEvent('#medi-checkout', 'change');
     riquadro = await page.locator('#medi-dlg-summary').textContent();
     cheque(!riquadro.includes('free on every night') && !riquadro.includes('Not available') && await page.locator('#medi-send-req').isEnabled(), 'date oltre i giorni noti: niente riga, niente blocco');
+
+    // date future scelte restano quando si apre un'altra camera
+    await page.fill('#medi-checkin', giorno(9)); await page.fill('#medi-checkout', giorno(11));
+    await page.dispatchEvent('#medi-checkout', 'change');
+    await page.click('#medi-close-dlg'); await page.click('[data-book="female"]');
+    cheque((await page.inputValue('#medi-checkin')) === giorno(9) && (await page.inputValue('#medi-checkout')) === giorno(11), 'date future già scelte restano aprendo un\'altra camera');
 
     // la richiesta parte e arriva al foglio
     await page.click('#medi-close-dlg');
