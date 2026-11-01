@@ -215,6 +215,7 @@ function guardaPedido(dati) {
       return k === "checkin" || k === "checkout" ? seriale(v.riga[k]) : v.riga[k];
     }));
     var fila = ws.getLastRow();
+    ws.getRange(fila, COLONNE.indexOf("checkin") + 1, 1, 2).setNumberFormat("yyyy-mm-dd");
     ws.getRange(fila, COLONNE.length + 1, 1, COLONNE_EXTRA.length).setFormulas([formuleControllo(fila)]);
   } finally {
     lucchetto.releaseLock();
