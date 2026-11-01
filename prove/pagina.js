@@ -40,21 +40,41 @@ async function apri(browser, { config, disp, postRisposta, ora, zona }) {
     return r.fulfill({ contentType: 'application/json', headers: CORS, body: JSON.stringify(disp ? { ok: true, datos: disp } : { ok: false, error: 'sin datos' }) });
   });
   // fuori dalla rete: tutto il resto (mappe, meteo, font) non serve a questa prova
-  await page.route(/^https?:\/\/(?!localhost|fg50\.github\.io|script\.example)/, r => r.abort());
+  visti.esterne = [];
+  await page.route(/^https?:\/\/(?!localhost|fg50\.github\.io|script\.example)/, r => { visti.esterne.push(r.request().url()); return r.abort(); });
   await page.goto('http://localhost:8765/index.html');
   await page.waitForSelector('[data-book="mixed"]', { timeout: 30000 });
   return { page, visti, ctx };
 }
 
 (async () => {
+  // SEO: quello che vede chi non esegue JavaScript (anteprime di WhatsApp, motori)
+  {
+    const grezzo = fs.readFileSync(path.join(RADICE, 'index.html'), 'utf8');
+    const testata = grezzo.slice(0, grezzo.indexOf('<script>'));
+    cheque(/<html lang="en">/.test(testata), 'testata statica: lingua della pagina');
+    cheque(/<title>[^<]*Asunción[^<]*<\/title>/.test(testata), 'testata statica: titolo con la citta\'');
+    cheque(/<meta name="description" content="[^"]{60,200}">/.test(testata), 'testata statica: descrizione');
+    cheque(/<meta property="og:title"/.test(testata) && /<meta property="og:description"/.test(testata) && /<meta property="og:url"/.test(testata), 'testata statica: anteprima per WhatsApp e Facebook');
+    cheque(/<link rel="canonical" href="https:\/\/fg50\.github\.io\/Mediterraneo-\/">/.test(testata), 'testata statica: indirizzo canonico');
+    const ld = /<script type="application\/ld\+json">(.*?)<\/script>/s.exec(testata);
+    let dati = null; try { dati = JSON.parse(ld[1]); } catch (e) {}
+    cheque(dati && dati['@type'] === 'Hostel' && dati.address.addressLocality === 'Asunción' && Math.abs(dati.geo.latitude + 25.2868) < 0.01, 'dati strutturati: Hostel, indirizzo e posizione');
+    cheque(/<noscript>\s*<h1>Mediterraneo Youth Hostel/.test(grezzo), 'senza JavaScript c\'e\' un titolo e un testo');
+    cheque(fs.existsSync(path.join(RADICE, 'sitemap.xml')) && /Sitemap: https:\/\/fg50/.test(fs.readFileSync(path.join(RADICE, 'robots.txt'), 'utf8')), 'sitemap.xml e robots.txt ci sono');
+  }
   await new Promise(r => server.listen(8765, r));
   const browser = await chromium.launch();
 
   // 1) senza configurazione: la pagina e' quella di prima
   {
-    const { page, ctx } = await apri(browser, { config: null });
+    const { page, visti, ctx } = await apri(browser, { config: null });
     await page.waitForTimeout(500);
     cheque(await page.locator('#medi-free-mixed').isHidden(), 'senza config.json nessun cartellino');
+    await page.waitForTimeout(1500);
+    const tessere = visti.esterne.filter(u => /\/\d+\/\d+\/\d+(\.png|@2x\.png)/.test(u));
+    cheque(tessere.length > 0 && tessere.every(u => u.startsWith('https://tile.openstreetmap.org/')), 'la mappa chiede le tessere a OpenStreetMap (' + tessere.length + ')');
+    cheque(!visti.esterne.some(u => /cartocdn/.test(u)), 'nessuna richiesta a CARTO (volevano una chiave)');
     await page.click('[data-book="mixed"]');
     cheque((await page.inputValue('#medi-checkin')) === giorno(0) && (await page.inputValue('#medi-checkout')) === giorno(1), 'all\'apertura: check-in oggi, check-out domani');
     cheque((await page.getAttribute('#medi-checkin', 'min')) === giorno(0), 'il minimo del check-in e\' oggi');

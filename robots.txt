@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://fg50.github.io/Mediterraneo-/sitemap.xml
