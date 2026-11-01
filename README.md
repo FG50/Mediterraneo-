@@ -20,37 +20,42 @@ restano.
 
 ## Le tre cose da fare prima che vada online
 
-### 1. I contatti
+### 1 e 2. Il foglio delle prenotazioni, e l'indirizzo nel sito
 
-In cima allo `<script>` dentro `index.html`:
-
-```js
-const CONTACT = { whatsapp: "595981XXXXXX", email: "..." };
-```
-
-Il numero col prefisso internazionale, senza spazi e senza `+`.
-
-### 2. Il registro delle prenotazioni
-
-Le prenotazioni non vanno per email: finiscono in un foglio, e da li' esce
-l'Excel. GitHub Pages non ha un server, quindi il pezzo che scrive sta
-dentro un foglio Google.
+Le prenotazioni non vanno per email: finiscono in un foglio Google, e da li'
+esce l'Excel. GitHub Pages non ha un server, quindi il pezzo che scrive sta
+dentro il foglio. Lo stesso foglio tiene anche le **camere libere**, che il
+foglio dei conti dell'ostello gli manda (vedi sotto), e le da' al sito.
 
 1. Vai su [sheets.new](https://sheets.new) e chiama il foglio
    *Prenotazioni sito*.
 2. **Estensioni → Apps Script**. Cancella quello che c'e' e incolla tutto
    `apps-script/Codice.gs`. Salva.
-3. **Esegui il deployment → Nuovo deployment**, tipo **App web**, con
+3. **Impostazioni progetto → Proprieta' dello script → Aggiungi**:
+   nome `CLAVE`, valore una parola lunga a caso. E' la chiave con cui il
+   foglio dei conti aggiorna le camere libere; senza, nessuno puo'.
+4. **Esegui il deployment → Nuovo deployment**, tipo **App web**, con
    *Esegui come*: **Me**, e *Chi ha accesso*: **Chiunque**.
-4. Copia l'indirizzo che ti da (finisce per `/exec`) e mettilo in
-   `index.html`:
+5. Copia l'indirizzo che ti da (finisce per `/exec`) e mettilo in
+   `config.json`, accanto a `index.html`:
 
-```js
-const BOOKINGS_ENDPOINT = "https://script.google.com/macros/s/..../exec";
+```json
+{ "endpoint": "https://script.google.com/macros/s/..../exec",
+  "whatsapp": "595981XXXXXX", "email": "..." }
 ```
 
-Finche' resta vuoto il tasto Prenota non fa finta di niente: copia la
-richiesta e apre WhatsApp gia' scritta.
+Il numero WhatsApp col prefisso internazionale, senza spazi e senza `+`.
+Il file e' pubblico, come il sito: ci vanno solo cose che il sito mostra
+comunque. **La chiave `CLAVE` non ci va mai.**
+
+Finche' `endpoint` resta vuoto la pagina e' quella di prima: il tasto
+Prenota non fa finta di niente, copia la richiesta e apre WhatsApp gia'
+scritta. Se il foglio risponde «no», la pagina non dice «Request received».
+
+Nel foglio compaiono due schede, create da sole:
+
+* **Pedidos** — una riga per richiesta (i campi che manda la pagina).
+* **Disponibilidad** — le camere libere notte per notte, gia' contate.
 
 ### 3. Le foto
 
@@ -58,6 +63,38 @@ In `ROOMS`, dentro `photos`, ogni foto e' `{ src: "...", alt: "..." }`.
 Finche' `src` manca, al suo posto compare un riquadro con scritto cosa
 dovrebbe esserci. Le immagini si possono mettere in `foto/` e
 richiamare come `foto/camerata-1.jpg`.
+
+## Le camere libere, dall'Excel dell'ostello al sito
+
+L'Excel dell'ostello e' privato e non si tocca. Il passaggio e' questo:
+
+```
+Excel dell'ostello  →  (ogni 30 minuti, sola lettura)  →  foglio Google  →  sito
+ repository Hostel        workflow «Camere libere per il sito»        Apps Script       cartellini
+```
+
+1. Nel repository privato `Hostel`, il workflow `disponibilita.yml` legge
+   l'Excel, conta i letti liberi per ogni camera e per ogni notte dei prossimi
+   120 giorni (un letto e' occupato se il suo codice, per esempio `G2`, sta
+   in UBICACION di una prenotazione), e li manda allo script con la chiave.
+2. Lo script li tiene nella scheda *Disponibilidad* e li da' al sito
+   (`?accion=disponibilidad`).
+3. Il sito mostra su ogni camera «6 of 8 beds free tonight», e nel riquadro
+   delle date «3 beds free on every night of your stay» oppure «Not
+   available on these dates»; in quel caso il tasto Invia si spegne.
+
+Nel repository `Hostel` servono due segreti: `SITO_ENDPOINT` (l'indirizzo
+`/exec`) e `SITO_CLAVE` (la stessa parola di `CLAVE`).
+
+Cose da sapere:
+
+* I numeri vengono **solo dall'Excel**. Una richiesta arrivata dal sito non
+  toglie posti finche' una persona non la mette in `REGISTRO RESERVAS`.
+* Numeri piu' vecchi di un giorno e mezzo la pagina li ignora: meglio nessun
+  numero che uno sbagliato. Se qualcosa non va, il sito funziona come prima e
+  nessuno viene bloccato.
+* Una prenotazione senza posti assegnati toglie un letto per categoria
+  (maschile, femminile, mista) invece che dai codici.
 
 ## Dall'Excel del foglio all'Excel che si legge
 
@@ -100,3 +137,17 @@ Leaflet con le mappe di OpenStreetMap fa la stessa cosa — strade vere, si
 trascina, si zooma — e ci lascia disegnare sopra i nostri pallini, con i
 nostri simboli e le distanze. Gratis e senza account.
 Chi vuole Google ce l'ha lo stesso: ogni posto nell'elenco ha il suo link.
+
+## Le prove
+
+Due, senza installare niente nel sito:
+
+```
+node apps-script/prueba.js      # lo script del foglio, con un foglio finto
+node prove/pagina.js            # la pagina vera in un browser (serve Playwright)
+```
+
+La seconda apre la pagina, le dice che il foglio esiste e risponde, e guarda
+che i cartellini, il riquadro delle date, il tasto Invia e la richiesta che
+parte siano quelli giusti. Controlla anche che ogni richiesta parta **una
+volta sola**.
